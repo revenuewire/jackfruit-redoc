@@ -481,6 +481,8 @@ paths:
       tags:
         - Domains
       description: Get `Domain` objects.
+      security:
+        - API-KEY: []
       responses:
         '200':
           description: Successful responses
@@ -626,12 +628,13 @@ paths:
           required: false
         - name: hop
           in: query
-          description: >-
-            Whether to turn of hop for linker, by default, it should be on
-            unless you know what you are doing.
-          type: boolean
+          description: Whether to turn of hop for linker, by default, it should be on unless you know what you are doing.
+          type: string
           default: 'on'
           required: false
+          enum:
+            - on
+            - off
       responses:
         '200':
           description: Successful responses
@@ -710,7 +713,7 @@ paths:
           in: query
           description: Page number
           type: integer
-          default: '1'
+          default: 1
         - name: sort
           in: query
           description: Multiple sorting indicators separated by comma
