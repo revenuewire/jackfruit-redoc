@@ -1,0 +1,11 @@
+{
+  "generator-openapi-repo": {
+    "importExistingSpec": true,
+    "importedSpec": "/Users/swang/code/jackfruit/rest/swagger.yaml",
+    "name": "Jackfruit Rest",
+    "repo": "revenuewire/jackfruit-redoc",
+    "splitSpec": false,
+    "samples": true,
+    "installSwaggerUI": true
+  }
+}
