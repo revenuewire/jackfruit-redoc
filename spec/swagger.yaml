@@ -3,7 +3,7 @@ info:
   version: v1
   title: JackFruit REST API
   description: This API *does not* represent the final product. Some of the APIs listed below are *highly experimental* and *will likely change* before the final release. They may come with *crashes and bugs* and may potentially cause *data loss*.
-
+  x-logo: "https://www.revenuewire.com/wp-content/uploads/2016/03/emblem-icons.png"
 basePath: /rest/v1
 consumes:
   - application/json
