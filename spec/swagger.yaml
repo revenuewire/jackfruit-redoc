@@ -1246,6 +1246,28 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+    '/subscriptions/legacy/{transactionItemId}/cancel':
+        put:
+            tags:
+                - Subscriptions
+            description: 'Depricated, legacy cancal customer recurring profile'
+            operationId: legacySubscriptionCancel
+            parameters:
+                -
+                    in: path
+                    name: transactionItemId
+                    description: 'Transaction item id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     /token:
         post:
             operationId: tokenGenerate
