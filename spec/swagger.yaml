@@ -62,165 +62,223 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/Context'
+    BillInfo:
+        description: 'Billing Information'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Billing Information'
+            gatewayProcessor:
+                type: string
+            currencyCode:
+                type: string
+            cardNumber:
+                type: string
+            cardType:
+                type: string
+            expiry:
+                type: string
+            payerId:
+                type: string
+            gatewayReference:
+                type: string
+            billingAddressName:
+                type: string
+            billingAddressPostalCode:
+                type: string
+            billingAddressRegionCode:
+                type: string
+            billingAddressCountryCode:
+                type: string
+    PaypalUrl:
+        description: 'Paypal Url'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    paypalUrl:
+                        type: string
     Customer:
         description: 'Customer object'
         type: object
         properties:
-            id:
-                type: integer
-            email:
-                type: string
-            firstName:
-                type: string
-            lastName:
-                type: string
-            timezone:
-                type: string
-            language:
-                type: string
-            created:
-                type: string
-                format: date
-            addresses:
-                type: array
-                items:
-                    $ref: '#/definitions/CustomerAddress'
-            phones:
-                type: array
-                items:
-                    $ref: '#/definitions/CustomerPhone'
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    email:
+                        type: string
+                    firstName:
+                        type: string
+                    lastName:
+                        type: string
+                    timezone:
+                        type: string
+                    language:
+                        type: string
+                    created:
+                        type: string
+                        format: date
+                    addresses:
+                        type: array
+                        items:
+                            $ref: '#/definitions/CustomerAddress'
+                    phones:
+                        type: array
+                        items:
+                            $ref: '#/definitions/CustomerPhone'
     CustomerAddress:
         description: 'Customer''s Addresses'
         type: object
         properties:
-            id:
-                type: integer
-            customerAccountId:
-                type: integer
-            transactionId:
-                type: integer
-            name:
-                type: string
-            address:
-                type: string
-            address2:
-                type: string
-            countryCode:
-                type: string
-            regionCode:
-                type: string
-            city:
-                type: string
-            postalCode:
-                type: string
-            type:
-                type: string
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    customerAccountId:
+                        type: integer
+                    transactionId:
+                        type: integer
+                    name:
+                        type: string
+                    address:
+                        type: string
+                    address2:
+                        type: string
+                    countryCode:
+                        type: string
+                    regionCode:
+                        type: string
+                    city:
+                        type: string
+                    postalCode:
+                        type: string
+                    type:
+                        type: string
     CustomerPhone:
         description: 'Customer''s phones'
         type: object
         properties:
-            id:
-                type: integer
-            customerAccountId:
-                type: integer
-            phoneNumber:
-                type: string
-            countryCode:
-                type: string
-            type:
-                type: string
-    CustomerOffer:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    customerAccountId:
+                        type: integer
+                    phoneNumber:
+                        type: string
+                    countryCode:
+                        type: string
+                    type:
+                        type: string
+    CustomerOffers:
         description: 'Customer Offer'
         type: object
         properties:
-            offer:
-                description: Offer
-                type: object
-                properties:
-                    offerId:
-                        type: integer
-                        description: 'Offer Id'
-                    transactionItemId:
-                        type: integer
-                        description: 'Transaction Item Id'
-                    transactionId:
-                        type: integer
-                        description: 'Transaction Id'
-                    name:
-                        type: string
-                        description: 'Offer Name'
-                    translatedName:
-                        type: string
-                        description: 'Translated Offer Name'
-                    productName:
-                        type: string
-                        description: 'Product Name'
-                    translatedProductName:
-                        type: string
-                        description: 'Translated Product Name'
-                    receiptUrl:
-                        type: string
-                        description: 'Receipt Url for this transaction'
-                    isRecurring:
-                        type: boolean
-                    isTrial:
-                        type: boolean
-                    shippingAddress:
-                        $ref: '#/definitions/CustomerAddress'
-                    transactionItem:
-                        description: 'Transaction Item'
-                        type: object
-                        properties:
-                            id:
-                                type: integer
-                                description: 'Transaction Item Id'
-                            sku:
-                                type: string
-                            quantity:
-                                type: integer
-                            price:
-                                type: number
-                            priceTax:
-                                type: number
-                            usdPrice:
-                                type: number
-                            usdPriceTax:
-                                type: number
-                            image:
-                                type: string
-                    recurringTransactionItem:
-                        description: 'Recurring Item'
-                        type: object
-                        properties:
-                            id:
-                                type: integer
-                                description: 'Recurring Transaction Item Id'
-                            offerId:
-                                type: integer
-                            initialSaleDate:
-                                type: string
-                                format: date
-                            nextBillingDate:
-                                type: string
-                                format: date
-                            finalBillingDate:
-                                type: string
-                                format: date
-                            interval:
-                                type: integer
-                            rebillFrequencyType:
-                                type: string
-                            rebillFrequencyValue:
-                                type: integer
-                            deactivatedDate:
-                                type: string
-                                format: date
-                            deactivatedType:
-                                type: string
-                            status:
-                                type: string
-                            customerBillingInfo:
-                                $ref: '#/definitions/CustomerPhone'
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    type: object
+                    properties:
+                        offerId:
+                            type: integer
+                            description: 'Offer Id'
+                        transactionItemId:
+                            type: integer
+                            description: 'Transaction Item Id'
+                        transactionId:
+                            type: integer
+                            description: 'Transaction Id'
+                        name:
+                            type: string
+                            description: 'Offer Name'
+                        translatedName:
+                            type: string
+                            description: 'Translated Offer Name'
+                        productName:
+                            type: string
+                            description: 'Product Name'
+                        translatedProductName:
+                            type: string
+                            description: 'Translated Product Name'
+                        receiptUrl:
+                            type: string
+                            description: 'Receipt Url for this transaction'
+                        isRecurring:
+                            type: boolean
+                        isTrial:
+                            type: boolean
+                        shippingAddress:
+                            $ref: '#/definitions/CustomerAddress'
+                        transactionItem:
+                            description: 'Transaction Item'
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    description: 'Transaction Item Id'
+                                sku:
+                                    type: string
+                                quantity:
+                                    type: integer
+                                price:
+                                    type: number
+                                priceTax:
+                                    type: number
+                                usdPrice:
+                                    type: number
+                                usdPriceTax:
+                                    type: number
+                                image:
+                                    type: string
+                        recurringTransactionItem:
+                            description: 'Recurring Item'
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    description: 'Recurring Transaction Item Id'
+                                offerId:
+                                    type: integer
+                                initialSaleDate:
+                                    type: string
+                                    format: date
+                                nextBillingDate:
+                                    type: string
+                                    format: date
+                                finalBillingDate:
+                                    type: string
+                                    format: date
+                                interval:
+                                    type: integer
+                                rebillFrequencyType:
+                                    type: string
+                                rebillFrequencyValue:
+                                    type: integer
+                                deactivatedDate:
+                                    type: string
+                                    format: date
+                                deactivatedType:
+                                    type: string
+                                status:
+                                    type: string
+                                customerBillingInfo:
+                                    $ref: '#/definitions/CustomerPhone'
     Domain:
         description: Domain
         type: object
@@ -393,35 +451,6 @@ definitions:
                 format: date-time
             reference:
                 type: string
-    BillInfo:
-        description: 'Billing Information'
-        type: object
-        properties:
-            id:
-                type: integer
-                description: 'Billing Information'
-            gatewayProcessor:
-                type: string
-            currencyCode:
-                type: string
-            cardNumber:
-                type: string
-            cardType:
-                type: string
-            expiry:
-                type: string
-            payerId:
-                type: string
-            gatewayReference:
-                type: string
-            billingAddressName:
-                type: string
-            billingAddressPostalCode:
-                type: string
-            billingAddressRegionCode:
-                type: string
-            billingAddressCountryCode:
-                type: string
     TransactionItem:
         description: 'Transaction Item'
         type: object
@@ -544,6 +573,136 @@ definitions:
                     language:
                         type: string
 paths:
+    '/billings/{billingInfoId}':
+        put:
+            tags:
+                - Billings
+            description: 'Update customer billing info for a recurring profile using redit card'
+            operationId: billingInfoUpdate
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: billingInfoId
+                    in: path
+                    description: 'bill info id for the recurring transaction item'
+                    type: integer
+                    required: true
+                -
+                    name: cardHolderFullName
+                    in: formData
+                    description: 'Card''s holder full name'
+                    type: string
+                    required: true
+                -
+                    name: cardNumber
+                    in: formData
+                    description: 'Credit Card number'
+                    type: string
+                    required: true
+                -
+                    name: cardExpiry
+                    in: formData
+                    description: 'Credit Card expiry'
+                    type: string
+                    required: true
+                -
+                    name: cardCCV
+                    in: formData
+                    description: 'Credit CCV (optional)'
+                    type: string
+                -
+                    name: recurringTransactionItemId
+                    in: formData
+                    description: 'recurring transaction item to be updated (optional)'
+                    type: string
+                -
+                    name: postalCode
+                    in: formData
+                    description: 'Postal code (optional)'
+                    type: string
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/BillInfo'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/billings/{billingInfoId}/update-paypal':
+        put:
+            tags:
+                - Billings
+            description: 'Update profile using paypal express'
+            operationId: billingInfoUpdatePaypal
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: billingInfoId
+                    in: path
+                    description: 'billing info id'
+                    type: string
+                    required: true
+                -
+                    name: ppToken
+                    in: formData
+                    description: 'sale info token generated by our side'
+                    type: string
+                -
+                    name: token
+                    in: formData
+                    description: 'token generated by paypal'
+                    type: string
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/BillInfo'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/billings/{billingInfoId}/setup-paypal-url':
+        post:
+            tags:
+                - Billings
+            description: 'Generate a paypal express url for updating billing info'
+            operationId: setUpPaypalUrl
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: billingInfoId
+                    in: path
+                    description: 'billing info id'
+                    type: string
+                    required: true
+                -
+                    name: returnUrl
+                    in: formData
+                    description: 'return url if everything goes well in paypal website'
+                    type: string
+                -
+                    name: cancelUrl
+                    in: formData
+                    description: 'cancel url if customer click cancel button in paypal website'
+                    type: string
+                -
+                    name: recurringTransactionItemId
+                    in: formData
+                    description: 'recurring transaction item to be updated (optional)'
+                    type: string
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaypalUrl'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     /customers:
         get:
             tags:
@@ -659,77 +818,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/CustomerOffer'
-                500:
-                    description: 'Error Responses'
-                    schema:
-                        $ref: '#/definitions/Error'
-    '/customers/{customerId}/billing-info/{billingInfoId}':
-        put:
-            tags:
-                - Customers
-            description: 'Update customer billing info for a recurring profile'
-            operationId: billingInfoUpdate
-            consumes:
-                - application/x-www-form-urlencoded
-            parameters:
-                -
-                    name: customerId
-                    in: path
-                    description: 'Customer id'
-                    type: string
-                    required: true
-                -
-                    name: billingInfoId
-                    in: path
-                    description: 'bill info id for the recurring transaction item'
-                    type: integer
-                    required: true
-                -
-                    name: cardHolderFullName
-                    in: formData
-                    description: 'Card''s holder full name'
-                    type: string
-                    required: true
-                -
-                    name: cardNumber
-                    in: formData
-                    description: 'Credit Card number'
-                    type: string
-                    required: true
-                -
-                    name: cardExpiry
-                    in: formData
-                    description: 'Credit Card expiry'
-                    type: string
-                    required: true
-                -
-                    name: cardCCV
-                    in: formData
-                    description: 'Credit CCV (optional)'
-                    type: string
-                -
-                    name: selectedGateway
-                    in: formData
-                    description: 'gateway prefered used to update billinfo (optional)'
-                    type: string
-                -
-                    name: postalCode
-                    in: formData
-                    description: 'Postal code (optional)'
-                    type: string
-            responses:
-                200:
-                    description: 'Successful responses'
-                    schema:
-                        type: object
-                        properties:
-                            billingInfo:
-                                $ref: '#/definitions/BillInfo'
-                            billingAddress:
-                                $ref: '#/definitions/CustomerAddress'
+                        $ref: '#/definitions/CustomerOffers'
                 500:
                     description: 'Error Responses'
                     schema:
