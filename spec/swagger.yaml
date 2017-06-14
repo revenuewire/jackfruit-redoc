@@ -652,7 +652,7 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
-    '/billings/{billingInfoId}/update-paypal':
+    /billings/update-paypal:
         put:
             tags:
                 - Billings
@@ -661,12 +661,6 @@ paths:
             consumes:
                 - application/x-www-form-urlencoded
             parameters:
-                -
-                    name: billingInfoId
-                    in: path
-                    description: 'billing info id'
-                    type: string
-                    required: true
                 -
                     name: ppToken
                     in: formData
