@@ -502,6 +502,28 @@ definitions:
                 type: string
             language:
                 type: string
+    Offer:
+        description: Offer
+        type: object
+        properties:
+            id:
+                type: integer
+            sku:
+                type: string
+            name:
+                type: string
+            description:
+                type: string
+            created:
+                type: string
+            type:
+                type: string
+            isRecurring:
+                type: boolean
+            isTrial:
+                type: boolean
+            payout:
+                type: integer
     Token:
         description: 'Token Object'
         type: object
@@ -1309,6 +1331,28 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/Profile'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/subscriptions/offer/{transactionItemId}':
+        get:
+            tags:
+                - Subscriptions
+            description: 'Get offer details'
+            operationId: subscriptionGetOffer
+            parameters:
+                -
+                    in: path
+                    name: transactionItemId
+                    description: 'Transaction item id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Offer'
                 500:
                     description: 'Error Responses'
                     schema:
