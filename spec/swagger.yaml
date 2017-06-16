@@ -62,35 +62,13 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/Context'
-    BillInfo:
-        description: 'Billing Information'
+    BillInfoResponse:
         type: object
         properties:
-            id:
-                type: integer
-                description: 'Billing Information'
-            gatewayProcessor:
-                type: string
-            currencyCode:
-                type: string
-            cardNumber:
-                type: string
-            cardType:
-                type: string
-            expiry:
-                type: string
-            payerId:
-                type: string
-            gatewayReference:
-                type: string
-            billingAddressName:
-                type: string
-            billingAddressPostalCode:
-                type: string
-            billingAddressRegionCode:
-                type: string
-            billingAddressCountryCode:
-                type: string
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/BillInfo'
     PaypalUrl:
         description: 'Paypal Url'
         type: object
@@ -451,6 +429,39 @@ definitions:
                 format: date-time
             reference:
                 type: string
+    BillInfo:
+        description: 'Billing Information'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Billing Information'
+            gatewayProcessor:
+                type: string
+            currencyCode:
+                type: string
+            cardNumber:
+                type: string
+            cardType:
+                type: string
+            expiry:
+                type: string
+            payerId:
+                type: string
+            gatewayReference:
+                type: string
+            billingAddressName:
+                type: string
+            billingAddressAddress:
+                type: string
+            billingAddressAddress2:
+                type: string
+            billingAddressPostalCode:
+                type: string
+            billingAddressRegionCode:
+                type: string
+            billingAddressCountryCode:
+                type: string
     TransactionItem:
         description: 'Transaction Item'
         type: object
@@ -647,7 +658,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/BillInfo'
+                        $ref: '#/definitions/BillInfoResponse'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -675,7 +686,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/BillInfo'
+                        $ref: '#/definitions/BillInfoResponse'
                 500:
                     description: 'Error Responses'
                     schema:
