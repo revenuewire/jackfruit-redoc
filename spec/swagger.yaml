@@ -62,6 +62,43 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/Context'
+    AffiliateLink:
+        description: 'Affiliate Link object'
+        type: object
+        required:
+            - url
+            - destinationId
+        properties:
+            url:
+                type: string
+            destinationId:
+                type: integer
+            aliasId:
+                type: integer
+    Alias:
+        description: 'Alias object'
+        type: object
+        required:
+            - id
+            - alias
+        properties:
+            id:
+                type: integer
+            alias:
+                type: string
+    Aliases:
+        description: Aliases
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/Alias'
     BillInfoResponse:
         type: object
         properties:
@@ -257,6 +294,27 @@ definitions:
                                     type: string
                                 customerBillingInfo:
                                     $ref: '#/definitions/CustomerPhone'
+    Destination:
+        description: 'Destinations object'
+        type: object
+        required:
+            - id
+            - fid
+            - name
+            - url
+        properties:
+            id:
+                type: integer
+            fid:
+                type: string
+            name:
+                type: string
+            url:
+                type: string
+            isCustom:
+                type: boolean
+            geos:
+                type: string
     Domain:
         description: Domain
         type: object
@@ -547,6 +605,54 @@ definitions:
                     token:
                         type: string
                         format: password
+    Tracking:
+        description: 'Tracking string'
+        type: object
+        required:
+            - id
+            - type
+            - name
+            - isGlobal
+            - data
+        properties:
+            id:
+                type: string
+            type:
+                type: string
+            name:
+                type: string
+            isGlobal:
+                type: boolean
+            data:
+                type: object
+                description: 'custom object containing data specific to tracking type'
+    PostbackTest:
+        description: 'Tracking object'
+        type: object
+        required:
+            - link
+            - action
+            - aliasFid
+            - destinationName
+            - responseCode
+            - success
+            - time
+        properties:
+            link:
+                type: string
+            action:
+                type: string
+            aliasFid:
+                type: string
+            destinationName:
+                type: string
+            responseCode:
+                type: integer
+            success:
+                type: boolean
+            time:
+                type: string
+                description: 'format: 2000-01-31T18:30:45+00:00'
     Identity:
         description: 'Identify of an user'
         type: object
@@ -597,6 +703,10 @@ definitions:
                         type: string
                     accountId:
                         type: integer
+                    defaultDashboard:
+                        type: string
+                    defaultProductView:
+                        type: string
                     passwordExpiryDates:
                         type: integer
                     lastLoginDate:
@@ -606,6 +716,58 @@ definitions:
                     language:
                         type: string
 paths:
+    /affiliatelinks:
+        get:
+            tags:
+                - 'Affiliate linker Links'
+            description: 'Get affiliate linker links'
+            operationId: affiliateLinksGet
+            parameters:
+                -
+                    name: catalogFid
+                    in: query
+                    description: 'Offer''s catalog FID'
+                    type: string
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Array containing affiliate linker links'
+                                type: array
+                                items:
+                                    $ref: '#/definitions/AffiliateLink'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /aliases:
+        get:
+            tags:
+                - Aliases
+            description: 'Get list of `Alias` objects.'
+            operationId: aliasesGet
+            parameters:
+                -
+                    name: groupAccountId
+                    in: query
+                    description: 'Group Account ID (admin only)'
+                    type: integer
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Aliases'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     '/billings/{billingInfoId}':
         put:
             tags:
@@ -900,6 +1062,150 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/CustomerAddress'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /destinations:
+        get:
+            tags:
+                - Destinations
+            description: 'Get list of `Destination` objects.'
+            operationId: destinationsGet
+            parameters:
+                -
+                    name: catalogFid
+                    in: query
+                    description: 'Offer''s catalog fid'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Array containing destination links'
+                                type: array
+                                items:
+                                    $ref: '#/definitions/Destination'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        post:
+            tags:
+                - Destinations
+            description: 'Add a new destination link'
+            operationId: destinationsAdd
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: catalogFid
+                    in: formData
+                    description: 'Offer''s catalog fid'
+                    type: string
+                    required: true
+                -
+                    name: name
+                    in: formData
+                    description: 'Destination link name'
+                    type: string
+                    required: true
+                -
+                    name: url
+                    in: formData
+                    description: 'Destination link URL'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Newly created destination link'
+                                $ref: '#/definitions/Destination'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/destinations/{id}':
+        put:
+            tags:
+                - Destinations
+            description: 'Update a destination link'
+            operationId: destinationsUpdate
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Destination id'
+                    type: integer
+                    required: true
+                -
+                    name: name
+                    in: formData
+                    description: 'Destination link name'
+                    type: string
+                    required: true
+                -
+                    name: url
+                    in: formData
+                    description: 'Destination link URL. Must begin with http:// or https://'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Newly updated destination link'
+                                $ref: '#/definitions/Destination'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        delete:
+            tags:
+                - Destinations
+            description: 'Delete a destination link'
+            operationId: destinationsDelete
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Destination id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -1432,6 +1738,210 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+    /trackings:
+        get:
+            tags:
+                - Trackings
+            description: 'Get list of `Tracking` objects.'
+            operationId: trackingsGet
+            parameters:
+                -
+                    name: catalogId
+                    in: query
+                    description: 'Offer''s catalog ID'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Array containing tracking objects'
+                                type: array
+                                items:
+                                    $ref: '#/definitions/Tracking'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        post:
+            tags:
+                - Trackings
+            description: 'Add a new tracking'
+            operationId: trackingsAdd
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: catalogId
+                    in: formData
+                    description: 'Offer''s catalog ID'
+                    type: string
+                    required: true
+                -
+                    name: type
+                    in: formData
+                    description: 'Tracking type'
+                    type: string
+                    required: true
+                -
+                    name: data
+                    in: formData
+                    description: 'Tracking specific data'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Newly created tracking'
+                                $ref: '#/definitions/Tracking'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/trackings/{id}':
+        put:
+            tags:
+                - Trackings
+            description: 'Update a tracking'
+            operationId: trackingsUpdate
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Tracking ID'
+                    type: string
+                    required: true
+                -
+                    name: data
+                    in: formData
+                    description: 'Tracking specific data'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Newly updated tracking'
+                                $ref: '#/definitions/Tracking'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        delete:
+            tags:
+                - Trackings
+            description: 'Delete a Tracking'
+            operationId: trackingsDelete
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Tracking ID'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/trackings/{id}/test':
+        post:
+            tags:
+                - Trackings
+            description: 'Send a test postback to a tracking (for GET type only)'
+            operationId: postbackTest
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Tracking ID'
+                    type: string
+                    required: true
+                -
+                    name: destinationId
+                    in: formData
+                    description: 'Test destination ID'
+                    type: integer
+                    required: true
+                -
+                    name: catalogId
+                    in: formData
+                    description: 'Catalog offer ID'
+                    type: integer
+                    required: true
+                -
+                    name: clickId
+                    in: formData
+                    description: 'click ID'
+                    type: string
+                    required: false
+                -
+                    name: subId
+                    in: formData
+                    description: 'sub ID'
+                    type: string
+                    required: false
+                -
+                    name: subId2
+                    in: formData
+                    description: 'sub ID 2'
+                    type: string
+                    required: false
+                -
+                    name: subId3
+                    in: formData
+                    description: 'sub ID 3'
+                    type: string
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Test results'
+                                $ref: '#/definitions/PostbackTest'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     /users/login:
         post:
             tags:
@@ -1744,9 +2254,39 @@ paths:
                 -
                     name: accountFullName
                     in: formData
-                    description: 'Customer''s name'
-                    required: true
+                    description: 'User''s name'
+                    required: false
                     type: string
+                -
+                    name: email
+                    in: formData
+                    description: 'User''s contact email'
+                    type: string
+                    required: false
+                -
+                    name: timezone
+                    in: formData
+                    description: 'Setup your timezone.'
+                    type: string
+                    required: false
+                -
+                    name: defaultDashboard
+                    in: formData
+                    description: 'User''s default dashboard'
+                    type: string
+                    required: false
+                    enum:
+                        - Sales
+                        - Chargebacks
+                -
+                    name: defaultProductView
+                    in: formData
+                    description: 'User''s default product view.'
+                    type: string
+                    required: false
+                    enum:
+                        - List
+                        - Grid
                 -
                     name: language
                     in: formData
