@@ -75,6 +75,38 @@ definitions:
                 type: integer
             aliasId:
                 type: integer
+    AffiliateAccount:
+        description: 'Affiliate Account object'
+        type: object
+        properties:
+            accountFid:
+                type: string
+            apiKey:
+                type: string
+            companyName:
+                type: string
+            website:
+                type: string
+            phone:
+                type: string
+            contactName:
+                type: string
+            technicalEmail:
+                type: string
+            address:
+                type: string
+            city:
+                type: string
+            stateProvince:
+                type: string
+            zipPostalCode:
+                type: string
+            gstNumber:
+                type: string
+            taxRegion:
+                type: string
+            paymentThreshold:
+                type: integer
     Alias:
         description: 'Alias object'
         type: object
@@ -743,6 +775,131 @@ paths:
                                 type: array
                                 items:
                                     $ref: '#/definitions/AffiliateLink'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/affiliates/{id}':
+        get:
+            tags:
+                - Affiliates
+            description: 'Get an affiliate''s company account information'
+            operationId: getAffiliateById
+            parameters:
+                -
+                    in: path
+                    name: id
+                    description: 'Affiliate Id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                $ref: '#/definitions/AffiliateAccount'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        put:
+            tags:
+                - Affiliates
+            description: 'Save an affiliate''s company account information'
+            operationId: saveAffiliateById
+            parameters:
+                -
+                    in: path
+                    name: id
+                    description: 'Affiliate ID'
+                    type: integer
+                    required: true
+                -
+                    in: query
+                    name: companyName
+                    description: 'Name of affiliate''s company'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: website
+                    description: 'Affiliate''s company website'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: phone
+                    description: 'Affiliate''s company phone number'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: contactName
+                    description: 'Affiliate''s company contact name to receive system notifications from RevenueWire'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: technicalEmail
+                    description: 'Affiliate''s company email address to receive system notifications from RevenueWire'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: address
+                    description: 'Affiliate''s company address'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: city
+                    description: 'Affiliate''s company city'
+                    type: string
+                    required: true
+                -
+                    in: query
+                    name: stateProvince
+                    description: 'Affiliate''s company country region (if applicable for that country)'
+                    type: string
+                -
+                    in: query
+                    name: zipPostalCode
+                    description: 'Affiliate''s company postal code'
+                    type: string
+                -
+                    in: query
+                    name: gstNumber
+                    description: 'Affiliate''s Canadian gst tax number (if applicable)'
+                    type: string
+                -
+                    in: query
+                    name: taxRegion
+                    description: 'Affiliate''s Canadian province that tax number is registered in (if applicable)'
+                    type: string
+                -
+                    in: query
+                    name: paymentThreshold
+                    description: 'Minimum amount that Affiliate wants to receive per payment'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                $ref: '#/definitions/AffiliateAccount'
                 500:
                     description: 'Error Responses'
                     schema:
