@@ -779,6 +779,38 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+    /affiliatemerchantterms:
+        post:
+            tags:
+                - 'Affiliate Merchant Terms'
+            description: 'Accept merchant terms as an affiliate'
+            operationId: affiliateMerchantTermsAdd
+            parameters:
+                -
+                    name: merchantTermId
+                    in: query
+                    description: 'Merchant Term ID'
+                    type: integer
+                    required: true
+                -
+                    name: affiliateAccountId
+                    in: query
+                    description: 'Affiliate Group Account ID (internal use only)'
+                    type: integer
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     '/affiliates/{id}':
         get:
             tags:
