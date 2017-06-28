@@ -904,6 +904,7 @@ paths:
                     name: zipPostalCode
                     description: 'Affiliate''s company postal code'
                     type: string
+                    required: true
                 -
                     in: query
                     name: gstNumber
