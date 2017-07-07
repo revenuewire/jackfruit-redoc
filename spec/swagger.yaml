@@ -625,6 +625,126 @@ definitions:
                 type: boolean
             payout:
                 type: integer
+    NewTemplates:
+        description: 'Sync new templates'
+        type: array
+        items:
+            $ref: '#/definitions/NewTemplate'
+    NewTemplate:
+        description: 'New template'
+        type: object
+        required:
+            - name
+            - fid
+            - scope
+        properties:
+            name:
+                description: 'Template name'
+                type: string
+            fid:
+                description: 'Template fid'
+                type: string
+            description:
+                description: 'Template description'
+                type: string
+            thumbnail:
+                description: 'Template thumbnail image url'
+                type: string
+            version:
+                description: 'Current version of the template.'
+                type: string
+            scope:
+                description: 'Scope of the template, either for all merchants or for specific merchant'
+                type: string
+                enum:
+                    - PUBLIC
+                    - LIMITED
+            accounts:
+                type: array
+                items:
+                    $ref: '#/definitions/AccountTemplate'
+            mediaBlocks:
+                type: array
+                items:
+                    $ref: '#/definitions/TemplateMediaBlock'
+    AccountTemplate:
+        description: 'Account Template'
+        type: object
+        required:
+            - fid
+            - status
+        properties:
+            fid:
+                type: string
+                description: 'Merchant''s fid'
+            status:
+                type: string
+                enum:
+                    - PENDING
+                    - ACTIVE
+                    - HIDE
+    Templates:
+        description: Templates
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/TemplateDataObject'
+    TemplateDataObject:
+        type: object
+        required:
+            - id
+            - name
+        properties:
+            id:
+                type: integer
+            name:
+                type: string
+            fid:
+                type: string
+            description:
+                type: string
+            thumbnail:
+                type: string
+            scope:
+                type: string
+            accounts:
+                type: array
+                items:
+                    $ref: '#/definitions/AccountTemplate'
+            mediaBlocks:
+                type: array
+                items:
+                    $ref: '#/definitions/TemplateMediaBlock'
+    TemplateMediaBlock:
+        type: object
+        properties:
+            key:
+                type: string
+            showToolbar:
+                type: boolean
+            defaultValue:
+                type: string
+    Deployment:
+        description: 'Templates Deployment Status'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: string
+                enum:
+                    - OK
+                    - FAILED
     Token:
         description: 'Token Object'
         type: object
@@ -1898,6 +2018,98 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /templates/sync:
+        post:
+            tags:
+                - 'Templates Management'
+            summary: 'Sync templates from cart 2.0'
+            operationId: templateSync
+            parameters:
+                -
+                    name: template
+                    in: body
+                    required: true
+                    schema:
+                        $ref: '#/definitions/NewTemplates'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Templates'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /templates/deploy:
+        post:
+            summary: 'Deploy templates to a new version'
+            tags:
+                - 'Templates Management'
+            operationId: templatesDeploy
+            parameters:
+                -
+                    name: version
+                    in: formData
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Deployment'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /templates/release:
+        post:
+            summary: 'Release templates'
+            tags:
+                - 'Templates Management'
+            operationId: templatesRelease
+            parameters:
+                -
+                    name: version
+                    in: formData
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Deployment'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /templates:
+        get:
+            tags:
+                - Templates
+            description: 'Get a list of templates'
+            operationId: templatesGet
+            parameters:
+                -
+                    name: accountId
+                    in: query
+                    description: 'Merchant account id'
+                    type: string
+                    required: false
+                -
+                    name: keywords
+                    in: query
+                    description: 'Search name or fid'
+                    type: string
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Templates'
                 500:
                     description: 'Error Responses'
                     schema:
