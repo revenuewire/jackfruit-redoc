@@ -805,6 +805,17 @@ definitions:
             time:
                 type: string
                 description: 'format: 2000-01-31T18:30:45+00:00'
+    UpdateEmailResponse:
+        description: 'response to a successfull email update request'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    token:
+                        type: string
     Identity:
         description: 'Identify of an user'
         type: object
@@ -2540,10 +2551,10 @@ paths:
                     schema:
                         $ref: '#/definitions/Error'
     '/users/{id}/update-email':
-        put:
+        post:
             tags:
                 - Users
-            description: 'Change email'
+            description: 'request email change'
             operationId: userUpdateEmail
             consumes:
                 - application/x-www-form-urlencoded
@@ -2564,9 +2575,43 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
+                        $ref: '#/definitions/UpdateEmailResponse'
+                500:
+                    description: 'Error responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/users/{id}/update-email/{token}':
+        put:
+            tags:
+                - Users
+            description: 'confirm email change'
+            operationId: userUpdateEmailConfirm
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'User id'
+                    required: true
+                    type: integer
+                -
+                    name: token
+                    in: query
+                    description: 'Token generated when creating email update request'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
                         $ref: '#/definitions/User'
                 500:
                     description: 'Error responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+                405:
+                    description: 'Method Not allowed response'
                     schema:
                         $ref: '#/definitions/Error'
     /users/sign-up:
