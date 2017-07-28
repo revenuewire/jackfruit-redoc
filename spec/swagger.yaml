@@ -2597,7 +2597,7 @@ paths:
                     type: integer
                 -
                     name: token
-                    in: query
+                    in: path
                     description: 'Token generated when creating email update request'
                     type: string
                     required: true
