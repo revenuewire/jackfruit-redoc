@@ -450,6 +450,40 @@ definitions:
                 type: string
             text:
                 type: string
+    Merchant:
+        description: 'Merchant info including block infos'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    merchantId:
+                        type: integer
+                    merchantName:
+                        type: string
+                    merchantFid:
+                        type: string
+                    blockedAffiliates:
+                        $ref: '#/definitions/AffiliateBlockObjs'
+    AffiliateBlockObj:
+        description: 'A block used to block affiliate sell merchant products'
+        type: object
+        properties:
+            blockId:
+                type: integer
+            affiliateId:
+                type: integer
+            affiliateFid:
+                type: string
+            affiliateName:
+                type: string
+    AffiliateBlockObjs:
+        description: 'An array of affiliate block objects'
+        type: array
+        items:
+            $ref: '#/definitions/AffiliateBlockObj'
     Transaction:
         description: Transaction
         type: object
@@ -1783,6 +1817,66 @@ paths:
                     description: 'Successful Responses'
                     schema:
                         $ref: '#/definitions/CountryList'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/merchants/{merchantId}/block-affiliate/':
+        post:
+            tags:
+                - Merchants
+            summary: 'Create merchant affiliate block'
+            description: 'Create a block which merchant does not allow affiliate sale products'
+            operationId: createAffiliateBlock
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: merchantId
+                    in: path
+                    description: 'Merchant group account id'
+                    type: integer
+                    required: true
+                -
+                    name: affiliateId
+                    in: formData
+                    description: 'Affiliate group account id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Merchant'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/merchants/{merchantId}/block-affiliate/{blockId}/':
+        delete:
+            tags:
+                - Merchants
+            summary: 'Delete Merchant Affiliate Block'
+            description: 'Delete merchant affiliate block to make affiliate to sell merchant product again'
+            operationId: deleteAffiliateBlock
+            parameters:
+                -
+                    name: merchantId
+                    in: path
+                    description: 'Merchant id'
+                    type: integer
+                    required: true
+                -
+                    name: blockId
+                    in: path
+                    description: 'Block id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Merchant'
                 500:
                     description: 'Error Responses'
                     schema:
