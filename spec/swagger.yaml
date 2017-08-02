@@ -466,7 +466,9 @@ definitions:
                     merchantFid:
                         type: string
                     blockedAffiliates:
-                        $ref: '#/definitions/AffiliateBlockObjs'
+                        type: array
+                        items:
+                            $ref: '#/definitions/AffiliateBlockObj'
     AffiliateBlockObj:
         description: 'A block used to block affiliate sell merchant products'
         type: object
@@ -479,11 +481,6 @@ definitions:
                 type: string
             affiliateName:
                 type: string
-    AffiliateBlockObjs:
-        description: 'An array of affiliate block objects'
-        type: array
-        items:
-            $ref: '#/definitions/AffiliateBlockObj'
     Transaction:
         description: Transaction
         type: object
