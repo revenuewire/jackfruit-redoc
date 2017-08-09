@@ -577,11 +577,13 @@ definitions:
                 type: string
             billingAddressAddress2:
                 type: string
+            billingAddressCity:
+                type: string
             billingAddressPostalCode:
                 type: string
-            billingAddressRegionCode:
-                type: string
             billingAddressCountryCode:
+                type: string
+            billingAddressRegionCode:
                 type: string
     TransactionItem:
         description: 'Transaction Item'
@@ -1138,7 +1140,7 @@ paths:
                 -
                     name: cardHolderFullName
                     in: formData
-                    description: 'Card''s holder full name'
+                    description: 'Card holder full name'
                     type: string
                     required: true
                 -
@@ -1156,18 +1158,21 @@ paths:
                 -
                     name: cardCCV
                     in: formData
-                    description: 'Credit CCV (optional)'
+                    description: 'Credit CCV'
                     type: string
+                    required: false
                 -
                     name: recurringTransactionItemId
                     in: formData
-                    description: 'recurring transaction item to be updated (optional)'
+                    description: 'recurring transaction item to be updated'
                     type: string
+                    required: false
                 -
                     name: postalCode
                     in: formData
-                    description: 'Postal code (optional)'
+                    description: 'Postal code'
                     type: string
+                    required: false
             responses:
                 200:
                     description: 'Successful responses'
@@ -1218,23 +1223,26 @@ paths:
                     name: billingInfoId
                     in: path
                     description: 'billing info id'
-                    type: string
+                    type: integer
                     required: true
                 -
                     name: returnUrl
                     in: formData
                     description: 'return url if everything goes well in paypal website'
                     type: string
+                    required: true
                 -
                     name: cancelUrl
                     in: formData
                     description: 'cancel url if customer click cancel button in paypal website'
                     type: string
+                    required: true
                 -
                     name: recurringTransactionItemId
                     in: formData
-                    description: 'recurring transaction item to be updated (optional)'
+                    description: 'recurring transaction item to be updated'
                     type: string
+                    required: false
             responses:
                 200:
                     description: 'Successful responses'
