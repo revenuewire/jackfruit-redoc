@@ -498,7 +498,9 @@ definitions:
                 type: string
             fullReference:
                 type: string
-            merchantNamr:
+            merchantName:
+                type: string
+            currency:
                 type: string
             supportEmail:
                 type: string
@@ -508,9 +510,9 @@ definitions:
                 type: number
             totalPriceTax:
                 type: number
-            totalUsdPrice:
+            totalUSDPrice:
                 type: number
-            totalUsdPriceTax:
+            totalUSDPriceTax:
                 type: number
             gateway:
                 type: string
@@ -530,14 +532,6 @@ definitions:
                 $ref: '#/definitions/CustomerAddress'
             billInfo:
                 $ref: '#/definitions/BillInfo'
-    CustomerOrders:
-        description: CustomerOrders
-        type: object
-        properties:
-            orders:
-                type: array
-                items:
-                    $ref: '#/definitions/CustomerOrder'
     CustomerOrder:
         description: CustomerOrder
         type: object
@@ -594,6 +588,8 @@ definitions:
                 description: 'Transaction Item Id'
             sku:
                 type: string
+            productName:
+                type: string
             quantity:
                 type: integer
             price:
@@ -606,6 +602,46 @@ definitions:
                 type: number
             image:
                 type: string
+    OrderLookUpRes:
+        description: 'Order look up response'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+    OrderDetails:
+        description: 'Order details of this order'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    reference:
+                        type: string
+                    created:
+                        type: string
+                    transactions:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Transaction'
+    ListOrders:
+        description: 'A list of orders'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    orders:
+                        type: array
+                        items:
+                            $ref: '#/definitions/CustomerOrder'
     Profile:
         description: 'User''s Profile'
         type: object
@@ -1890,11 +1926,12 @@ paths:
         get:
             tags:
                 - Orders
-            description: 'Get a list of transactions a order has'
+            description: 'Get this order info and transactions of this order'
+            operationId: getOrderDetail
             parameters:
                 -
-                    in: path
                     name: orderId
+                    in: path
                     description: 'Order id'
                     type: integer
                     required: true
@@ -1902,9 +1939,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/Transaction'
+                        $ref: '#/definitions/OrderDetails'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -1914,22 +1949,25 @@ paths:
             tags:
                 - Orders
             description: 'Look up order info by email and send it'
-            consumes:
-                - multipart/form-data
+            operationId: orderLookUp
             parameters:
                 -
-                    in: formData
                     name: email
-                    description: email
+                    in: formData
+                    description: 'customer email'
                     type: string
                     required: true
+                -
+                    name: merchantFid
+                    in: formData
+                    description: 'merchant fid'
+                    type: string
+                    required: false
             responses:
                 200:
                     description: 'Successful responses'
                     schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/Response'
+                        $ref: '#/definitions/OrderLookUpRes'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -1939,6 +1977,7 @@ paths:
             tags:
                 - Orders
             description: 'Get a list of orders'
+            operationId: getOrderList
             parameters:
                 -
                     name: email
@@ -1949,16 +1988,14 @@ paths:
                 -
                     name: merchantFid
                     in: query
-                    description: 'Merchant fid (optional)'
+                    description: 'Merchant fid'
                     type: string
                     required: false
             responses:
                 200:
                     description: 'Successful responses'
                     schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/CustomerOrders'
+                        $ref: '#/definitions/ListOrders'
                 500:
                     description: 'Error Responses'
                     schema:
