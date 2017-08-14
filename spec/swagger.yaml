@@ -149,90 +149,8 @@ definitions:
                 properties:
                     paypalUrl:
                         type: string
-    Customer:
-        description: 'Customer object'
-        type: object
-        properties:
-            response:
-                $ref: '#/definitions/Response'
-            data:
-                type: object
-                properties:
-                    id:
-                        type: integer
-                    email:
-                        type: string
-                    firstName:
-                        type: string
-                    lastName:
-                        type: string
-                    timezone:
-                        type: string
-                    language:
-                        type: string
-                    created:
-                        type: string
-                        format: date
-                    addresses:
-                        type: array
-                        items:
-                            $ref: '#/definitions/CustomerAddress'
-                    phones:
-                        type: array
-                        items:
-                            $ref: '#/definitions/CustomerPhone'
-    CustomerAddress:
-        description: 'Customer''s Addresses'
-        type: object
-        properties:
-            response:
-                $ref: '#/definitions/Response'
-            data:
-                type: object
-                properties:
-                    id:
-                        type: integer
-                    customerAccountId:
-                        type: integer
-                    transactionId:
-                        type: integer
-                    name:
-                        type: string
-                    address:
-                        type: string
-                    address2:
-                        type: string
-                    countryCode:
-                        type: string
-                    regionCode:
-                        type: string
-                    city:
-                        type: string
-                    postalCode:
-                        type: string
-                    type:
-                        type: string
-    CustomerPhone:
-        description: 'Customer''s phones'
-        type: object
-        properties:
-            response:
-                $ref: '#/definitions/Response'
-            data:
-                type: object
-                properties:
-                    id:
-                        type: integer
-                    customerAccountId:
-                        type: integer
-                    phoneNumber:
-                        type: string
-                    countryCode:
-                        type: string
-                    type:
-                        type: string
-    CustomerOffers:
-        description: 'Customer Offer'
+    CustomersRespone:
+        description: 'Order details of this order'
         type: object
         properties:
             response:
@@ -240,92 +158,197 @@ definitions:
             data:
                 type: array
                 items:
-                    type: object
-                    properties:
-                        offerId:
-                            type: integer
-                            description: 'Offer Id'
-                        transactionItemId:
-                            type: integer
-                            description: 'Transaction Item Id'
-                        transactionId:
-                            type: integer
-                            description: 'Transaction Id'
-                        name:
-                            type: string
-                            description: 'Offer Name'
-                        translatedName:
-                            type: string
-                            description: 'Translated Offer Name'
-                        productName:
-                            type: string
-                            description: 'Product Name'
-                        translatedProductName:
-                            type: string
-                            description: 'Translated Product Name'
-                        receiptUrl:
-                            type: string
-                            description: 'Receipt Url for this transaction'
-                        isRecurring:
-                            type: boolean
-                        isTrial:
-                            type: boolean
-                        shippingAddress:
-                            $ref: '#/definitions/CustomerAddress'
-                        transactionItem:
-                            description: 'Transaction Item'
-                            type: object
-                            properties:
-                                id:
-                                    type: integer
-                                    description: 'Transaction Item Id'
-                                sku:
-                                    type: string
-                                quantity:
-                                    type: integer
-                                price:
-                                    type: number
-                                priceTax:
-                                    type: number
-                                usdPrice:
-                                    type: number
-                                usdPriceTax:
-                                    type: number
-                                image:
-                                    type: string
-                        recurringTransactionItem:
-                            description: 'Recurring Item'
-                            type: object
-                            properties:
-                                id:
-                                    type: integer
-                                    description: 'Recurring Transaction Item Id'
-                                offerId:
-                                    type: integer
-                                initialSaleDate:
-                                    type: string
-                                    format: date
-                                nextBillingDate:
-                                    type: string
-                                    format: date
-                                finalBillingDate:
-                                    type: string
-                                    format: date
-                                interval:
-                                    type: integer
-                                rebillFrequencyType:
-                                    type: string
-                                rebillFrequencyValue:
-                                    type: integer
-                                deactivatedDate:
-                                    type: string
-                                    format: date
-                                deactivatedType:
-                                    type: string
-                                status:
-                                    type: string
-                                customerBillingInfo:
-                                    $ref: '#/definitions/CustomerPhone'
+                    $ref: '#/definitions/CustomerObj'
+    CustomerObj:
+        description: 'Customer object'
+        type: object
+        properties:
+            id:
+                type: integer
+            email:
+                type: string
+            firstName:
+                type: string
+            lastName:
+                type: string
+            timezone:
+                type: string
+            created:
+                type: string
+            addressess:
+                type: array
+                items:
+                    $ref: '#/definitions/CustomerAddressObj'
+            phones:
+                type: array
+                items:
+                    $ref: '#/definitions/CustomerPhoneObj'
+    Customer:
+        description: 'Customer object'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/CustomerObj'
+    CustomerAddressObj:
+        description: 'Customer''s Addresses'
+        type: object
+        properties:
+            id:
+                type: integer
+            customerAccountId:
+                type: integer
+            transactionId:
+                type: integer
+            name:
+                type: string
+            address:
+                type: string
+            address2:
+                type: string
+            countryCode:
+                type: string
+            regionCode:
+                type: string
+            city:
+                type: string
+            postalCode:
+                type: string
+            type:
+                type: string
+    CustomerPhoneObj:
+        description: 'Customer phone'
+        type: object
+        properties:
+            id:
+                type: integer
+            customerAccountId:
+                type: integer
+            phoneNumber:
+                type: string
+            countryCode:
+                type: string
+            type:
+                type: string
+    CustomerAddress:
+        description: 'Customer''s Addresses'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/CustomerAddressObj'
+    CustomerOffers:
+        description: 'Customer offers object'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/CustomerOffersObj'
+    CustomerTransactions:
+        description: 'Customer transactions object'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/Transaction'
+    CustomerOffersObj:
+        description: 'Customer Offer'
+        type: object
+        properties:
+            offerId:
+                type: integer
+                description: 'Offer Id'
+            transactionItemId:
+                type: integer
+                description: 'Transaction Item Id'
+            transactionId:
+                type: integer
+                description: 'Transaction Id'
+            name:
+                type: string
+                description: 'Offer Name'
+            translatedName:
+                type: string
+                description: 'Translated Offer Name'
+            productName:
+                type: string
+                description: 'Product Name'
+            translatedProductName:
+                type: string
+                description: 'Translated Product Name'
+            receiptUrl:
+                type: string
+                description: 'Receipt Url for this transaction'
+            isRecurring:
+                type: boolean
+            isTrial:
+                type: boolean
+            shippingAddress:
+                $ref: '#/definitions/CustomerAddressObj'
+            transactionItem:
+                description: 'Transaction Item'
+                type: object
+                properties:
+                    id:
+                        type: integer
+                        description: 'Transaction Item Id'
+                    sku:
+                        type: string
+                    quantity:
+                        type: integer
+                    price:
+                        type: number
+                    priceTax:
+                        type: number
+                    usdPrice:
+                        type: number
+                    productName:
+                        type: string
+                    usdPriceTax:
+                        type: number
+                    image:
+                        type: string
+            recurringTransactionItem:
+                description: 'Recurring Item'
+                type: object
+                properties:
+                    id:
+                        type: integer
+                        description: 'Recurring Transaction Item Id'
+                    offerId:
+                        type: integer
+                    initialSaleDate:
+                        type: string
+                        format: date
+                    nextBillingDate:
+                        type: string
+                        format: date
+                    finalBillingDate:
+                        type: string
+                        format: date
+                    interval:
+                        type: integer
+                    rebillFrequencyType:
+                        type: string
+                    rebillFrequencyValue:
+                        type: integer
+                    deactivatedDate:
+                        type: string
+                        format: date
+                    deactivatedType:
+                        type: string
+                    status:
+                        type: string
+                    customerBillingInfo:
+                        $ref: '#/definitions/BillInfo'
     Destination:
         description: 'Destinations object'
         type: object
@@ -1292,47 +1315,13 @@ paths:
         get:
             tags:
                 - Customers
-            description: 'Get list of `Customers` objects.'
-            parameters:
-                -
-                    name: email
-                    in: query
-                    description: 'Customer''s Email'
-                    type: string
-                -
-                    name: name
-                    in: query
-                    description: 'Customer''s Name'
-                    type: string
-                -
-                    name: post_code
-                    in: query
-                    description: 'Customer''s Post code'
-                    type: string
-                -
-                    name: phone
-                    in: query
-                    description: 'Customer''s phone'
-                    type: string
-                -
-                    name: page
-                    in: query
-                    description: 'Page number'
-                    type: integer
-                    default: 1
-                -
-                    name: sort
-                    in: query
-                    description: 'Multiple sorting indicators separated by comma'
-                    type: string
-                    default: '-created,email'
+            description: 'Get list of Customers for a merchant'
+            operationId: getCustomersForMerchant
             responses:
                 200:
                     description: 'Successful responses'
                     schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/Customer'
+                        $ref: '#/definitions/CustomersRespone'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -1341,13 +1330,14 @@ paths:
         get:
             tags:
                 - Customers
-            description: 'Get a `Customer` object.'
+            description: 'Get a customer object'
+            operationId: getCustomer
             parameters:
                 -
                     name: customerId
                     in: path
                     description: 'Customer id'
-                    type: string
+                    type: integer
                     required: true
             responses:
                 200:
@@ -1362,27 +1352,20 @@ paths:
         get:
             tags:
                 - Customers
-            description: 'Get a list of `Transactions` purchased by the customer.'
+            description: 'Get a list of Transactions purchased by the customer'
+            operationId: getTransactions
             parameters:
                 -
                     name: customerUserId
                     in: path
                     description: 'Customer user id'
-                    type: string
+                    type: integer
                     required: true
-                -
-                    name: accountId
-                    in: query
-                    description: 'Merchant account id'
-                    type: number
-                    required: false
             responses:
                 200:
                     description: 'Successful responses'
                     schema:
-                        type: array
-                        items:
-                            $ref: '#/definitions/Transaction'
+                        $ref: '#/definitions/CustomerTransactions'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -1391,7 +1374,8 @@ paths:
         get:
             tags:
                 - Customers
-            description: 'Get a list of `Offers` purchased by the customer.'
+            description: 'Get a list of Offers purchased by the customer'
+            operationId: getOffers
             parameters:
                 -
                     name: customerUserId
@@ -1412,7 +1396,8 @@ paths:
         put:
             tags:
                 - Customers
-            description: 'Update customer group account address'
+            description: 'Update customer group account oder shipping address'
+            operationId: updateShippingAddress
             consumes:
                 - application/x-www-form-urlencoded
             parameters:
@@ -1420,7 +1405,7 @@ paths:
                     name: customerId
                     in: path
                     description: 'Customer id'
-                    type: string
+                    type: integer
                     required: true
                 -
                     name: transactionId
@@ -1433,26 +1418,31 @@ paths:
                     in: formData
                     description: 'Customer''s name'
                     type: string
+                    required: true
                 -
                     name: address
                     in: formData
                     description: 'Customer''s address'
                     type: string
+                    required: true
                 -
                     name: countryCode
                     in: formData
                     description: 'Country code'
                     type: string
+                    required: true
                 -
                     name: city
                     in: formData
                     description: City
                     type: string
+                    required: true
                 -
                     name: postalCode
                     in: formData
                     description: 'Postal code'
                     type: string
+                    required: true
             responses:
                 200:
                     description: 'Successful responses'
