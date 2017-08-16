@@ -970,6 +970,14 @@ definitions:
                         type: string
                     language:
                         type: string
+    UserForgetPassword:
+        description: 'Response for user forgetting password api call'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
 paths:
     /affiliatelinks:
         get:
@@ -2599,7 +2607,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/Response'
+                        $ref: '#/definitions/UserForgetPassword'
                 500:
                     description: 'Error Responses'
                     schema:
