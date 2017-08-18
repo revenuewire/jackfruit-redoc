@@ -695,6 +695,21 @@ definitions:
                 type: string
             language:
                 type: string
+    CancelProfileResponse:
+        description: 'Response for user cancel profile api call'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+    OfferResponse:
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/Offer'
     Offer:
         description: Offer
         type: object
@@ -2118,7 +2133,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/Offer'
+                        $ref: '#/definitions/OfferResponse'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -2140,7 +2155,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/Response'
+                        $ref: '#/definitions/CancelProfileResponse'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -2162,7 +2177,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/Response'
+                        $ref: '#/definitions/CancelProfileResponse'
                 500:
                     description: 'Error Responses'
                     schema:
