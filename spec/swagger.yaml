@@ -75,6 +75,19 @@ definitions:
                 type: integer
             aliasId:
                 type: integer
+    MerchantTerms:
+        description: 'Merchant additional terms'
+        properties:
+            id:
+                type: integer
+            acceptRequired:
+                type: string
+            terms:
+                type: string
+        required:
+            - id
+            - acceptRequired
+            - terms
     AffiliateAccount:
         description: 'Affiliate Account object'
         type: object
@@ -149,6 +162,140 @@ definitions:
                 properties:
                     paypalUrl:
                         type: string
+    CatalogOffer:
+        description: 'Catalog Offer object'
+        properties:
+            id:
+                type: integer
+            name:
+                type: string
+            offerType:
+                type: string
+                enum:
+                    - RevShare
+                    - SALE
+                    - LEAD
+                    - INSTALL
+                    - DOWNLOAD
+                    - SIGNUP
+                    - OTHER
+            productCategory:
+                type: string
+            promoMethods:
+                type: array
+                items:
+                    type: string
+            payout:
+                type: number
+            payoutType:
+                type: string
+                enum:
+                    - NONE
+                    - FIXED
+                    - PERCENT
+            epc:
+                type: number
+            eps:
+                type: number
+            cvr:
+                type: number
+            description:
+                type: string
+            boxshotLink:
+                type: string
+            previewLink:
+                type: string
+            isCpa:
+                type: boolean
+            languages:
+                type: array
+                items:
+                    type: string
+            displayPrice:
+                type: number
+            geos:
+                type: array
+                items:
+                    type: string
+            linker:
+                type: integer
+                enum:
+                    - 1
+                    - 2
+        required:
+            - id
+            - name
+            - offerType
+            - productCategory
+            - promoMethods
+            - payout
+            - payoutType
+            - epc
+            - eps
+            - cvr
+            - description
+            - boxshotLink
+            - previewLink
+            - isCpa
+            - languages
+            - displayPrice
+            - geos
+            - linker
+    CatalogOfferDetail:
+        allOf:
+            -
+                $ref: '#/definitions/CatalogOffer'
+            -
+                properties:
+                    marketingMaterials:
+                        type: array
+                        items:
+                            $ref: '#/definitions/MarketingMaterial'
+                    merchantTerm:
+                        description: 'RevShare only'
+                        $ref: '#/definitions/MerchantTerms'
+                    geos:
+                        description: 'CPA only'
+                        type: array
+                        items:
+                            $ref: '#/definitions/Geo'
+                    policy:
+                        description: 'CPA only'
+                        $ref: '#/definitions/CpaPayoutPolicy'
+                    terms:
+                        type: string
+        required:
+            - marketingMaterials
+    MarketingMaterial:
+        properties:
+            filename:
+                type: string
+            url:
+                type: string
+            dimensions:
+                type: string
+    Geo:
+        properties:
+            code:
+                type: string
+            payout:
+                type: string
+    CpaPayoutPolicy:
+        properties:
+            id:
+                type: integer
+            hasApplied:
+                type: boolean
+            acceptedTerms:
+                type: boolean
+            type:
+                type: string
+                enum:
+                    - PUBLIC
+                    - APPLY_TO_RUN
+                    - LIMIT
+            terms:
+                type: string
     CustomersRespone:
         description: 'Order details of this order'
         type: object
@@ -1330,6 +1477,321 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/PaypalUrl'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /catalog:
+        get:
+            tags:
+                - Catalog
+            description: 'Gets `Offer` objects'
+            operationId: catalogOffersGet
+            parameters:
+                -
+                    name: keyword
+                    in: query
+                    description: 'Search criteria keyword'
+                    type: string
+                    required: false
+                -
+                    name: offerTypes
+                    in: query
+                    description: "Filter results by offer types. Can include RevShare or any CPA offer type. \\\n\nJSON-formatted array (case insensitive). eg:\n`[\"RevShare\", \"Install\"]` (case insensitive)\n"
+                    type: string
+                    required: false
+                -
+                    name: productCategories
+                    in: query
+                    description: "Filter results by product category fids.\n\nJSON-formatted array (case insensitive). eg:\n`[\"live_support\", \"antivirus\"]`\n"
+                    type: string
+                    default: ''
+                    required: false
+                -
+                    name: languages
+                    in: query
+                    description: "Filter results on (RevShare) language codes. Doesn't affect CPA results.\n\nJSON-formatted array (case insensitive). eg:\n`[\"EN\", \"FR\"]`\n"
+                    type: string
+                    required: false
+                -
+                    name: geos
+                    in: query
+                    description: "Filter results on (CPA) geo codes. Doesn't affect RevShare results.\n\nJSON-formatted array (case insensitive). eg:\n`[\"US\", \"CA\"]`\n"
+                    type: string
+                    required: false
+                -
+                    name: promoMethods
+                    in: query
+                    description: "Filter results on promotional methods.\n\nJSON-formatted array (case insensitive). eg:\n`[\"Email\", \"SEO\", 'Paid Search']`\n"
+                    type: string
+                    required: false
+                -
+                    name: payoutMin
+                    in: query
+                    description: 'Minimum fixed payout. Doesn''t affect %-based payout results.'
+                    type: integer
+                    required: false
+                -
+                    name: payoutMax
+                    in: query
+                    description: 'Maximum fixed payout. Doesn''t affect %-based payout results.'
+                    type: integer
+                    required: false
+                -
+                    name: percentMin
+                    in: query
+                    description: 'Minimum percentage payout. Doesn''t affect fixed payout results.'
+                    type: integer
+                    required: false
+                -
+                    name: percentMax
+                    in: query
+                    description: 'Maximum percentage payout. Doesn''t affect fixed payout results.'
+                    type: integer
+                    required: false
+                -
+                    name: couponsOnly
+                    in: query
+                    description: 'Show only products with coupons. RevShare only, CPA offers will be filtered out..'
+                    type: boolean
+                    required: false
+                -
+                    name: privateOnly
+                    in: query
+                    description: 'Show only private network products.'
+                    type: boolean
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                type: array
+                                items:
+                                    $ref: '#/definitions/CatalogOffer'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/catalog/{id}':
+        get:
+            tags:
+                - Catalog
+            description: 'Gets `Offer` objects'
+            operationId: catalogOfferGet
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Catalog offer ID'
+                    type: integer
+                    required: true
+                -
+                    name: affiliateAccountId
+                    in: query
+                    description: 'Affiliate Group Account ID (internal use only)'
+                    type: integer
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                $ref: '#/definitions/CatalogOfferDetail'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /catalog/top-offers:
+        get:
+            tags:
+                - Catalog
+            description: 'Gets featured top offers list'
+            operationId: topOffersGet
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                type: array
+                                items:
+                                    $ref: '#/definitions/CatalogOffer'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        put:
+            tags:
+                - Catalog
+            description: 'Saves featured top offers list'
+            operationId: topOffersPut
+            parameters:
+                -
+                    name: offers
+                    in: query
+                    description: "Top offer catalog IDs (can save up to 7)\n\nJSON-formatted array of IDs. eg:\n`[9, 84]`\n"
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /catalog/new-offers:
+        get:
+            tags:
+                - Catalog
+            description: 'Gets featured new offers list'
+            operationId: newOffersGet
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                type: array
+                                items:
+                                    $ref: '#/definitions/CatalogOffer'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        put:
+            tags:
+                - Catalog
+            description: 'Saves featured new offers list'
+            operationId: newOffersPut
+            parameters:
+                -
+                    name: offers
+                    in: query
+                    description: "Top offer catalog IDs (can save up to 7)\n\nJSON-formatted array of IDs. eg:\n`[9, 84]`\n"
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /cpaapplytorun:
+        post:
+            tags:
+                - 'CPA Apply To Run'
+            description: 'Apply to run a CPA offer as an affiliate'
+            operationId: cpaApplyToRunAdd
+            parameters:
+                -
+                    name: offerId
+                    in: query
+                    description: 'Catalog Offer ID'
+                    type: integer
+                    required: true
+                -
+                    name: geos
+                    in: query
+                    description: 'geo codes (JSON-formatted array)'
+                    type: string
+                    required: false
+                -
+                    name: promoMethods
+                    in: query
+                    description: 'promotion methods (JSON-formatted array)'
+                    type: string
+                    required: false
+                -
+                    name: additionalDetails
+                    in: query
+                    description: 'additional comments to include with application'
+                    type: string
+                    required: false
+                -
+                    name: customCreatives
+                    in: query
+                    description: 'use custom creatives in campaign'
+                    type: boolean
+                    required: false
+                -
+                    name: affiliateAccountId
+                    in: query
+                    description: 'Affiliate Group Account ID (internal use only)'
+                    type: integer
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/cpaapplytorun/{payoutPolicyId}/accept':
+        put:
+            tags:
+                - 'CPA Accept Terms'
+            description: 'Accept CPA Payout Policy terms and conditions as an affiliate'
+            operationId: cpaTermsAccept
+            parameters:
+                -
+                    name: payoutPolicyId
+                    in: path
+                    description: 'CPA Payout Policy ID'
+                    type: integer
+                    required: true
+                -
+                    name: affiliateAccountId
+                    in: query
+                    description: 'Affiliate Group Account ID (internal use only)'
+                    type: integer
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
                 500:
                     description: 'Error Responses'
                     schema:
