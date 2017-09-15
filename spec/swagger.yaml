@@ -850,35 +850,61 @@ definitions:
                 $ref: '#/definitions/Response'
             data:
                 type: object
-    OfferResponse:
+    SubscriptionInfoResponse:
         type: object
         properties:
             response:
                 $ref: '#/definitions/Response'
             data:
-                $ref: '#/definitions/Offer'
-    Offer:
-        description: Offer
-        type: object
-        properties:
-            id:
-                type: integer
-            sku:
-                type: string
-            name:
-                type: string
-            description:
-                type: string
-            created:
-                type: string
-            type:
-                type: string
-            isRecurring:
-                type: boolean
-            isTrial:
-                type: boolean
-            payout:
-                type: integer
+                type: object
+                description: 'Subscription Info including offer and recurring item info'
+                properties:
+                    id:
+                        type: number
+                    initialSaleDate:
+                        type: string
+                        format: date-time
+                    nextBillingDate:
+                        type: string
+                        format: date-time
+                    finalBillingDate:
+                        type: string
+                        format: date-time
+                    interval:
+                        type: number
+                    rebillFrequencyType:
+                        type: string
+                    rebillFrequencyValue:
+                        type: number
+                    deactivateDate:
+                        type: string
+                        format: date-time
+                    deactivateType:
+                        type: string
+                    status:
+                        type: string
+                    offer:
+                        type: object
+                        description: 'Offer Info'
+                        properties:
+                            id:
+                                type: number
+                            sku:
+                                type: string
+                            name:
+                                type: string
+                            description:
+                                type: string
+                            created:
+                                type: string
+                            type:
+                                type: string
+                            isRecurring:
+                                type: boolean
+                            isTrial:
+                                type: boolean
+                            payout:
+                                type: integer
     NewTemplates:
         description: 'Sync new templates'
         type: array
@@ -2578,16 +2604,38 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
-    '/subscriptions/offer/{transactionItemId}':
+    '/subscriptions/{id}':
         get:
             tags:
                 - Subscriptions
-            description: 'Get offer details'
-            operationId: subscriptionGetOffer
+            description: 'Get Subscription Details'
+            operationId: getSubscriptionInfo
             parameters:
                 -
                     in: path
-                    name: transactionItemId
+                    name: id
+                    description: 'Recurring Transaction item id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SubscriptionInfoResponse'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/subscriptions/legacy/{id}':
+        get:
+            tags:
+                - Subscriptions
+            description: 'Get Subscription Details for a transaction item'
+            operationId: getLegacySubscriptionInfo
+            parameters:
+                -
+                    in: path
+                    name: id
                     description: 'Transaction item id'
                     type: integer
                     required: true
@@ -2595,7 +2643,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/OfferResponse'
+                        $ref: '#/definitions/SubscriptionInfoResponse'
                 500:
                     description: 'Error Responses'
                     schema:
