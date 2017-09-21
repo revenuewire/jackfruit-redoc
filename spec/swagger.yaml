@@ -842,6 +842,392 @@ definitions:
                 type: string
             language:
                 type: string
+    RevshareSummaryData:
+        description: 'Revshare data object'
+        type: object
+        required:
+            - date
+            - orders
+            - sales
+            - refunds
+            - refundRate
+            - chargebacks
+            - chargebackRate
+        properties:
+            date:
+                type: string
+            orders:
+                type: number
+            sales:
+                type: number
+            refunds:
+                type: number
+            refundRate:
+                type: number
+            chargebacks:
+                type: number
+            chargebackRate:
+                type: number
+    RevshareSummaryDatas:
+        description: 'Revshare data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/RevshareSummaryData'
+    RevshareData:
+        description: 'Revshare data object'
+        type: object
+        required:
+            - activeSubscriptions
+            - alias
+            - cancelledSubscriptions
+            - clicks
+            - initialOrders
+            - initialSales
+            - lifetimeAvgSubscriptionAge
+            - lifetimeAvgSubscriptionValue
+            - netOrders
+            - netSales
+            - offer
+            - orders
+            - period
+            - recurringOrders
+            - recurringSales
+            - refundsAndChargebacks
+            - refundsAndChargebacksRate
+            - Sales
+            - SalesRate
+        properties:
+            activeSubscriptions:
+                type: number
+            alias:
+                type: string
+            cancelledSubscriptions:
+                type: number
+            clicks:
+                type: number
+            initialOrders:
+                type: number
+            initialSales:
+                type: number
+            lifetimeAvgSubscriptionAge:
+                type: number
+            lifetimeAvgSubscriptionValue:
+                type: number
+            netOrders:
+                type: number
+            netSales:
+                type: number
+            offer:
+                type: string
+            orders:
+                type: number
+            period:
+                type: string
+            recurringOrders:
+                type: number
+            recurringSales:
+                type: number
+            refundsAndChargebacks:
+                type: number
+            refundsAndChargebacksRate:
+                type: number
+            Sales:
+                type: number
+            SalesRate:
+                type: number
+    RevshareDatas:
+        description: 'Resvhare data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/RevshareData'
+    RevshareGraphData:
+        description: 'Revshare data object'
+        type: object
+        required:
+            - activeSubscriptions
+            - cancelledSubscriptions
+            - clicks
+            - initialOrders
+            - initialSales
+            - lifetimeAvgSubscriptionAge
+            - lifetimeAvgSubscriptionValue
+            - netOrders
+            - netSales
+            - offer
+            - orders
+            - period
+            - recurringOrders
+            - recurringSales
+            - refundsAndChargebacks
+            - refundsAndChargebacksRate
+            - Sales
+            - SalesRate
+        properties:
+            activeSubscriptions:
+                type: number
+            cancelledSubscriptions:
+                type: number
+            clicks:
+                type: number
+            initialOrders:
+                type: number
+            initialSales:
+                type: number
+            lifetimeAvgSubscriptionAge:
+                type: number
+            lifetimeAvgSubscriptionValue:
+                type: number
+            netOrders:
+                type: number
+            netSales:
+                type: number
+            offer:
+                type: string
+            orders:
+                type: number
+            period:
+                type: string
+            recurringOrders:
+                type: number
+            recurringSales:
+                type: number
+            refundsAndChargebacks:
+                type: number
+            refundsAndChargebacksRate:
+                type: number
+            Sales:
+                type: number
+            SalesRate:
+                type: number
+    RevshareGraphDatas:
+        description: 'Revshare data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/RevshareGraphData'
+    RevshareCountData:
+        description: 'Total number of rows'
+        type: number
+    RevshareTotalsData:
+        description: 'Revshare data object'
+        type: object
+        required:
+            - clicks
+            - orders
+            - refundsAndChargebacks
+            - refundsAndChargebacksRate
+            - sales
+            - salesRate
+        properties:
+            clicks:
+                type: number
+            orders:
+                type: number
+            refundsAndChargebacks:
+                type: number
+            refundsAndChargebacksRate:
+                type: number
+            sales:
+                type: number
+            salesRate:
+                type: number
+    RevshareExportData:
+        description: 'Data object'
+        type: object
+        required:
+            - url
+        properties:
+            url:
+                type: string
+    SafecartCampaignSummaryData:
+        description: 'Performance data object'
+        type: object
+        required:
+            - alias
+            - category
+            - clicks
+            - conversionRate
+            - conversions
+            - epc
+            - offer
+            - payout
+            - period
+            - sales
+            - type
+        properties:
+            category:
+                type: string
+            clicks:
+                type: number
+            conversions:
+                type: number
+            epc:
+                type: number
+            offer:
+                type: string
+            payout:
+                type: number
+            sales:
+                type: number
+            status:
+                type: string
+    SafecartCampaignSummaryDatas:
+        description: 'Performance data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/SafecartCampaignSummaryData'
+    SafecartCampaignData:
+        description: 'Performance data object'
+        type: object
+        required:
+            - alias
+            - category
+            - clicks
+            - conversionRate
+            - conversions
+            - epc
+            - offer
+            - payout
+            - period
+            - sales
+            - type
+        properties:
+            alias:
+                type: string
+            category:
+                type: string
+            clicks:
+                type: number
+            conversionRate:
+                type: number
+            conversions:
+                type: number
+            epc:
+                type: number
+            offer:
+                type: string
+            payout:
+                type: number
+            period:
+                type: string
+            sales:
+                type: number
+            type:
+                type: string
+    SafecartCampaignDatas:
+        description: 'Performance data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/SafecartCampaignData'
+    SafecartCampaignGraphData:
+        description: 'Performance data object'
+        type: object
+        required:
+            - clicks
+            - conversionRate
+            - conversions
+            - epc
+            - offer
+            - period
+            - sales
+        properties:
+            clicks:
+                type: number
+            conversionRate:
+                type: number
+            conversions:
+                type: number
+            epc:
+                type: number
+            offer:
+                type: string
+            period:
+                type: string
+            sales:
+                type: number
+    SafecartCampaignGraphDatas:
+        description: 'Performance data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/SafecartCampaignGraphData'
+    SafecartCampaignCountData:
+        description: 'Total number of rows'
+        type: number
+    SafecartCampaignTotalsData:
+        description: 'Performance data object'
+        type: object
+        required:
+            - clicks
+            - conversionRate
+            - conversions
+            - epc
+            - sales
+        properties:
+            clicks:
+                type: number
+            conversionRate:
+                type: number
+            conversions:
+                type: number
+            epc:
+                type: number
+            sales:
+                type: number
+    SafecartCampaignExportData:
+        description: 'Data object'
+        type: object
+        required:
+            - url
+        properties:
+            url:
+                type: string
     CancelProfileResponse:
         description: 'Response for user cancel profile api call'
         type: object
@@ -2604,6 +2990,405 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+    /reports/revshare/summary:
+        get:
+            tags:
+                - 'Reports - Revshare'
+            description: 'Get summarized performance data for revshare offers for today, yesterday, last thirty days, this month and last month'
+            operationId: reportsRevshareSummary
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RevshareSummaryDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/revshare:
+        get:
+            tags:
+                - 'Reports - Revshare'
+            description: 'Get summarized performance data for revshare offers'
+            operationId: reportsRevshareSummary
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/RevshareGraphScale'
+                -
+                    $ref: '#/parameters/RevshareGraphMetric'
+                -
+                    $ref: '#/parameters/RevshareSort'
+                -
+                    $ref: '#/parameters/RevshareGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RevshareDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/revshare/graph:
+        get:
+            tags:
+                - 'Reports - Revshare'
+            description: 'Get summarized performance data for revshare offers formatted for use in a graph'
+            operationId: reportsRevshareSummary
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/RevshareGraphScale'
+                -
+                    $ref: '#/parameters/RevshareGraphMetric'
+                -
+                    $ref: '#/parameters/RevshareSort'
+                -
+                    $ref: '#/parameters/RevshareGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RevshareGraphDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/revshare/count:
+        get:
+            tags:
+                - 'Reports - Revshare'
+            description: 'Get the total number of rows in the report on performance data for revshare offers'
+            operationId: reportsRevshareSummary
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/RevshareGraphScale'
+                -
+                    $ref: '#/parameters/RevshareGraphMetric'
+                -
+                    $ref: '#/parameters/RevshareSort'
+                -
+                    $ref: '#/parameters/RevshareGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RevshareCountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/revshare/totals:
+        get:
+            tags:
+                - 'Reports - Revshare'
+            description: 'Get summarized totals of performance data for revshare offers'
+            operationId: reportsRevshareSummary
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/RevshareGraphScale'
+                -
+                    $ref: '#/parameters/RevshareGraphMetric'
+                -
+                    $ref: '#/parameters/RevshareSort'
+                -
+                    $ref: '#/parameters/RevshareGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RevshareTotalsData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/revshare/export:
+        get:
+            tags:
+                - 'Reports - Revshare'
+            description: 'Get a link to download a report of summarized performance data for revshare offers'
+            operationId: reportsRevshareSummary
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/RevshareGraphScale'
+                -
+                    $ref: '#/parameters/RevshareGraphMetric'
+                -
+                    $ref: '#/parameters/RevshareSort'
+                -
+                    $ref: '#/parameters/RevshareGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RevshareExportData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/safecartcampaign/summary:
+        get:
+            tags:
+                - 'Reports - Performance'
+            description: 'Get summarized performance data for theseven revshare and cpa offers that have performed best over the last seven days'
+            operationId: reportsPerformanceSummary
+            parameters:
+                -
+                    name: startDate
+                    in: query
+                    description: 'Start date (YYYY-MM-DD)'
+                    required: true
+                    type: string
+                -
+                    name: endDate
+                    in: query
+                    description: 'End date (YYYY-MM-DD)'
+                    required: true
+                    type: string
+                -
+                    name: limit
+                    in: query
+                    description: 'The number of results to return'
+                    required: false
+                    type: number
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SafecartCampaignSummaryDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/safecartcampaign:
+        get:
+            tags:
+                - 'Reports - Performance'
+            description: 'Get summarized performance data for revshare and cpa offers'
+            operationId: reportsPerformance
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/OfferTypes'
+                -
+                    $ref: '#/parameters/OfferCategories'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphScale'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphMetric'
+                -
+                    $ref: '#/parameters/SafecartCampaignSort'
+                -
+                    $ref: '#/parameters/SafecartCampaignGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SafecartCampaignDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/safecartcampaign/graph:
+        get:
+            tags:
+                - 'Reports - Performance'
+            description: 'Get summarized performance data for revshare and cpa offers formatted for use in a graph'
+            operationId: reportsPerformanceGraph
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/OfferTypes'
+                -
+                    $ref: '#/parameters/OfferCategories'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphScale'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphMetric'
+                -
+                    $ref: '#/parameters/SafecartCampaignSort'
+                -
+                    $ref: '#/parameters/SafecartCampaignGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SafecartCampaignGraphDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/safecartcampaign/count:
+        get:
+            tags:
+                - 'Reports - Performance'
+            description: 'Get the total number of rows in the report on performance data for revshare and cpa offers'
+            operationId: reportsPerformanceCount
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/OfferTypes'
+                -
+                    $ref: '#/parameters/OfferCategories'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphScale'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphMetric'
+                -
+                    $ref: '#/parameters/SafecartCampaignSort'
+                -
+                    $ref: '#/parameters/SafecartCampaignGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SafecartCampaignCountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/safecartcampaign/totals:
+        get:
+            tags:
+                - 'Reports - Performance'
+            description: 'Get summarized totals of performance data for revshare and cpa offers'
+            operationId: reportsPerformanceTotals
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/OfferTypes'
+                -
+                    $ref: '#/parameters/OfferCategories'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphScale'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphMetric'
+                -
+                    $ref: '#/parameters/SafecartCampaignSort'
+                -
+                    $ref: '#/parameters/SafecartCampaignGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SafecartCampaignTotalsData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/safecartcampaign/export:
+        get:
+            tags:
+                - 'Reports - Performance'
+            description: 'Get a link to download a report of summarized performance data for revshare and cpa offers'
+            operationId: reportsPerformanceExport
+            parameters:
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/OfferTypes'
+                -
+                    $ref: '#/parameters/OfferCategories'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphScale'
+                -
+                    $ref: '#/parameters/SafecartCampaignGraphMetric'
+                -
+                    $ref: '#/parameters/SafecartCampaignSort'
+                -
+                    $ref: '#/parameters/SafecartCampaignGroupableColumns'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/SafecartCampaignExportData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     '/subscriptions/{id}':
         get:
             tags:
@@ -3408,3 +4193,213 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+parameters:
+    Start:
+        name: start
+        in: query
+        description: 'Start date (YYYY-MM-DD)'
+        required: true
+        type: string
+    End:
+        name: end
+        in: query
+        description: 'End date (YYYY-MM-DD)'
+        required: true
+        type: string
+    Offers:
+        name: offers
+        in: query
+        required: true
+        description: 'A JSON encoded array of offer IDs (eg ["1","2"])'
+        type: array
+        items:
+            type: string
+    OfferTypes:
+        name: offerTypes
+        in: query
+        required: true
+        description: 'A JSON encoded array of offer types (eg ["download","lead"])'
+        type: array
+        items:
+            type: string
+    OfferCategories:
+        name: categories
+        in: query
+        required: true
+        description: 'A JSON encoded array of offer categories (eg ["antimalware","drivers"])'
+        type: array
+        items:
+            type: string
+    Aliases:
+        name: aliases
+        in: query
+        required: true
+        description: 'A JSON encoded array of alias IDs (eg ["1","2"])'
+        type: array
+        items:
+            type: string
+    Pagination:
+        name: pagination
+        in: body
+        description: 'A JSON encoded array with the columns to group data on (eg. ["period","alias"])'
+        required: true
+        schema:
+            type: object
+            properties:
+                page:
+                    type: number
+                recordsPerPage:
+                    type: number
+                start:
+                    type: number
+                end:
+                    type: number
+    RevshareGraphScale:
+        name: graphScale
+        in: query
+        description: 'The x-axis scale to use for graph data. Also defines the length of ''period'' when grouping on ''period''.'
+        required: true
+        type: string
+        enum:
+            - offer
+            - hourly
+            - daily
+            - weekly
+            - monthly
+    RevshareGraphMetric:
+        name: graphMetric
+        in: query
+        required: true
+        description: 'The y-axis metrics to use for graph data. A JSON encoded array of one or two strings (eg. ["col1","col2"])'
+        type: array
+        items:
+            type: string
+            enum:
+                - clicks
+                - orders
+                - sales
+                - conversionRate
+                - refundsAndChargebacks
+                - refundAndChargebackRate
+                - netOrders
+                - netSales
+                - initialOrders
+                - initialSales
+                - recurringOrders
+                - recurringSales
+                - cancelledSubscriptions
+                - activeSubscriptions
+                - lifetimeAvgSubscriptionAge
+                - lifetimeAvgSubscriptionValue
+    RevshareSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"sales","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - alias
+                        - offer
+                        - period
+                        - clicks
+                        - orders
+                        - sales
+                        - conversionRate
+                        - refundsAndChargebacks
+                        - refundAndChargebackRate
+                        - netOrders
+                        - netSales
+                        - initialOrders
+                        - initialSales
+                        - recurringOrders
+                        - recurringSales
+                        - cancelledSubscriptions
+                        - activeSubscriptions
+                        - lifetimeAvgSubscriptionAge
+                        - lifetimeAvgSubscriptionValue
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
+    RevshareGroupableColumns:
+        name: groupableColumns
+        in: query
+        required: true
+        description: 'A JSON encoded array with the columns to group data on (eg. ["period","alias"])'
+        type: array
+        items:
+            type: string
+            enum:
+                - period
+                - offer
+                - alias
+    SafecartCampaignGraphScale:
+        name: graphScale
+        in: query
+        description: 'The x-axis scale to use for graph data. Also defines the length of ''period'' when grouping on ''period''.'
+        required: true
+        type: string
+        enum:
+            - offer
+            - hourly
+            - daily
+            - weekly
+            - monthly
+    SafecartCampaignGraphMetric:
+        name: graphMetric
+        in: query
+        required: true
+        description: 'The y-axis metrics to use for graph data. A JSON encoded array of one or two strings (eg. ["col1","col2"])'
+        type: array
+        items:
+            type: string
+            enum:
+                - clicks
+                - conversions
+                - conversionRate
+                - sales
+                - epc
+    SafecartCampaignSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"sales","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - aliases
+                        - offers
+                        - type
+                        - category
+                        - period
+                        - clicks
+                        - conversions
+                        - sales
+                        - epc
+                        - payout
+                        - conversionRate
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
+    SafecartCampaignGroupableColumns:
+        name: groupableColumns
+        in: query
+        required: true
+        description: 'A JSON encoded array with the columns to group data on (eg. ["period","alias"])'
+        type: array
+        items:
+            type: string
+            enum:
+                - period
+                - offer
+                - alias
