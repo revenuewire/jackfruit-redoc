@@ -842,6 +842,453 @@ definitions:
                 type: string
             language:
                 type: string
+    ClickRegisterData:
+        description: 'Click register data object'
+        type: object
+        required:
+            - alias
+            - clickId
+            - clickInterval
+            - country
+            - date
+            - ip
+            - offer
+            - os
+            - referrer
+            - session
+            - subId
+            - subId2
+            - subId3
+            - zone
+        properties:
+            alias:
+                type: string
+            clickId:
+                type: string
+            clickInterval:
+                type: integer
+            country:
+                type: string
+            date:
+                type: string
+            ip:
+                type: string
+            offer:
+                type: string
+            os:
+                type: string
+            referrer:
+                type: string
+            session:
+                type: string
+            subId:
+                type: string
+            subId2:
+                type: string
+            subId3:
+                type: string
+            zone:
+                type: string
+    ClickRegisterDatas:
+        description: 'Click register data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/ClickRegisterData'
+    ConversionsDailyOrHourlyData:
+        description: 'Daily or hourly conversions summary data object'
+        type: object
+        required:
+            - clicks
+            - conversionRate
+            - conversions
+            - date
+            - fourteenDayAverage
+            - payout
+            - weekOverWeekAverage
+        properties:
+            clicks:
+                type: integer
+            conversionRate:
+                type: number
+            conversions:
+                type: integer
+            date:
+                type: string
+            fourteenDayAverage:
+                type: number
+            payout:
+                type: number
+            weekOverWeekAverage:
+                type: number
+    ConversionsDailyOrHourlyDatas:
+        description: 'Daily or hourly conversions summary data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/ConversionsDailyOrHourlyData'
+    ConversionsRegisterData:
+        description: 'Conversions register data object'
+        type: object
+        required:
+            - alias
+            - browser
+            - clickId
+            - country
+            - date
+            - ip
+            - offer
+            - os
+            - payout
+            - reference
+            - referrer
+            - session
+            - subId
+            - subId2
+            - subId3
+            - transactionType
+            - zone
+        properties:
+            alias:
+                type: string
+            browser:
+                type: string
+            clickId:
+                type: string
+            country:
+                type: string
+            date:
+                type: string
+            ip:
+                type: string
+            offer:
+                type: string
+            os:
+                type: string
+            payout:
+                type: number
+            reference:
+                type: string
+            referrer:
+                type: string
+            session:
+                type: string
+            subId:
+                type: string
+            subId2:
+                type: string
+            subId3:
+                type: string
+            transactionType:
+                type: string
+            zone:
+                type: string
+    ConversionsRegisterDatas:
+        description: 'Conversions register data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/ConversionsRegisterData'
+    ConversionsRegisterGraphData:
+        description: 'Conversions register graph data object'
+        type: object
+        required:
+            - conversions
+            - locale
+            - salesRate
+        properties:
+            conversions:
+                type: string
+            locale:
+                type: string
+            salesRate:
+                type: number
+    ConversionsRegisterGraphDatas:
+        description: 'Conversions register graph data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/ConversionsRegisterGraphData'
+    ConversionsRegisterTotalsData:
+        description: 'Summarized CPA conversions and reversals and revshate transactions totals data object'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: string
+    ExportData:
+        description: 'Data object'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            data:
+                type: object
+                required:
+                    - url
+                properties:
+                    url:
+                        type: string
+            response:
+                $ref: '#/definitions/Response'
+    CountData:
+        description: 'Total number of rows'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: integer
+    PaymentsSummaryData:
+        description: 'Payments data object'
+        type: object
+        required:
+            - id
+            - period
+            - paymentDate
+            - payout
+        properties:
+            id:
+                type: string
+            period:
+                type: string
+            paymentDate:
+                type: string
+            payout:
+                type: number
+    PaymentsSummaryDatas:
+        description: 'Payments data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/PaymentsSummaryData'
+    PaymentsData:
+        description: 'Payments data object'
+        type: object
+        required:
+            - adjustments
+            - balance
+            - balanceRelease
+            - grossPayout
+            - holdback
+            - holdbackRelease
+            - id
+            - paymentDate
+            - paymentFees
+            - payout
+            - period
+            - refundsAndChargebacks
+        properties:
+            adjustments:
+                type: number
+            balance:
+                type: number
+            balanceRelease:
+                type: number
+            grossPayout:
+                type: number
+            holdback:
+                type: number
+            holdbackRelease:
+                type: number
+            id:
+                type: string
+            paymentDate:
+                type: string
+            paymentFees:
+                type: number
+            payout:
+                type: number
+            period:
+                type: string
+            refundsAndChargebacks:
+                type: number
+    PaymentsDatas:
+        description: 'Payments data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/PaymentsData'
+    PaymentsGraphData:
+        description: 'Payments graph data object'
+        type: object
+        required:
+            - class
+            - id
+            - start
+            - title
+        properties:
+            class:
+                type: string
+            id:
+                type: string
+            start:
+                type: string
+            title:
+                type: string
+    PaymentsGraphDatas:
+        description: 'Payments graph data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/PaymentsGraphData'
+    PaymentsDetailsCpaData:
+        description: 'CPA payment details data object'
+        type: object
+        required:
+            - currency
+            - date
+            - netSales
+            - offer
+            - reference
+            - status
+            - time
+        properties:
+            currency:
+                type: string
+            date:
+                type: string
+            netSales:
+                type: number
+            offer:
+                type: string
+            reference:
+                type: string
+            status:
+                type: string
+            time:
+                type: string
+    PaymentsDetailsCpaDatas:
+        description: 'CPA payment details data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/PaymentsDetailsCpaData'
+    PaymentsTotalsData:
+        description: 'Summarized CPA or revshare payments totals data object'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                required:
+                    - conversions
+                    - netSales
+                properties:
+                    conversions:
+                        type: integer
+                    netSales:
+                        type: number
+    PaymentsDetailsRevshareData:
+        description: 'Revshare payment details data object'
+        type: object
+        required:
+            - currency
+            - date
+            - merchant
+            - netSales
+            - offer
+            - time
+            - transactionId
+            - transactionType
+        properties:
+            currency:
+                type: string
+            date:
+                type: string
+            merchant:
+                type: string
+            netSales:
+                type: number
+            offer:
+                type: string
+            time:
+                type: string
+            transactionId:
+                type: string
+            transactionType:
+                type: string
+    PaymentsDetailsRevshareDatas:
+        description: 'Revshare payment details data'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/PaymentsDetailsRevshareData'
     RevshareSummaryData:
         description: 'Revshare data object'
         type: object
@@ -1028,9 +1475,6 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/RevshareGraphData'
-    RevshareCountData:
-        description: 'Total number of rows'
-        type: number
     RevshareTotalsData:
         description: 'Revshare data object'
         type: object
@@ -1054,14 +1498,6 @@ definitions:
                 type: number
             salesRate:
                 type: number
-    RevshareExportData:
-        description: 'Data object'
-        type: object
-        required:
-            - url
-        properties:
-            url:
-                type: string
     SafecartCampaignSummaryData:
         description: 'Performance data object'
         type: object
@@ -1197,9 +1633,6 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/SafecartCampaignGraphData'
-    SafecartCampaignCountData:
-        description: 'Total number of rows'
-        type: number
     SafecartCampaignTotalsData:
         description: 'Performance data object'
         type: object
@@ -1220,14 +1653,6 @@ definitions:
                 type: number
             sales:
                 type: number
-    SafecartCampaignExportData:
-        description: 'Data object'
-        type: object
-        required:
-            - url
-        properties:
-            url:
-                type: string
     CancelProfileResponse:
         description: 'Response for user cancel profile api call'
         type: object
@@ -2990,6 +3415,636 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+    /reports/clickregister:
+        get:
+            tags:
+                - 'Reports - Click Register'
+            description: 'Get a list of linker hits both for revshare and CPA offers'
+            operationId: reportsClickRegister
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Merchants'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Languages'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/ClickRegisterKeyword'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/ClickRegisterSort'
+                -
+                    $ref: '#/parameters/ClickRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ClickRegisterDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/clickregister/count:
+        get:
+            tags:
+                - 'Reports - Click Register'
+            description: 'Get a count of the total number of linker hits both for revshare and CPA offers'
+            operationId: reportsClickRegisterGetCount
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Merchants'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Languages'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/ClickRegisterKeyword'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/ClickRegisterSort'
+                -
+                    $ref: '#/parameters/ClickRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/CountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/daily:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get a summary of the most recent seven days of cpa conversions and reversals and revshare transactions'
+            operationId: reportsConversionsDaily
+            parameters:
+                -
+                    $ref: '#/parameters/StartDate'
+                -
+                    $ref: '#/parameters/EndDate'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ConversionsDailyOrHourlyDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/hourly:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get a summary of the most recent seven hours of cpa conversions and reversals and revshare transactions'
+            operationId: reportsConversionsHourly
+            parameters:
+                -
+                    $ref: '#/parameters/StartDate'
+                -
+                    $ref: '#/parameters/EndDate'
+                -
+                    $ref: '#/parameters/StartHour'
+                -
+                    $ref: '#/parameters/EndHour'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ConversionsDailyOrHourlyDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/register:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get a list of cpa conversions and reversals and revshare transactions'
+            operationId: reportsConversionsRegister
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/TransactionTypes'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/GeographicalGraphScale'
+                -
+                    $ref: '#/parameters/ConversionRegisterSort'
+                -
+                    $ref: '#/parameters/ConversionRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ConversionsRegisterDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/register/graph:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get summary conversion and reversal and revshare transaction data formatted for use in a graph'
+            operationId: reportsConversionsRegisterGraph
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/TransactionTypes'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/GeographicalGraphScale'
+                -
+                    $ref: '#/parameters/ConversionRegisterSort'
+                -
+                    $ref: '#/parameters/ConversionRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ConversionsRegisterGraphDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/register/totals:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get summary (totals) conversions and reversals data and revshare transactions data'
+            operationId: reportsConversionsHourly
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/TransactionTypes'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/GeographicalGraphScale'
+                -
+                    $ref: '#/parameters/ConversionRegisterSort'
+                -
+                    $ref: '#/parameters/ConversionRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ConversionsRegisterTotalsDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/register/count:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get a total number of conversions and reversals and revshare transactions'
+            operationId: reportsConversionsRegisterCount
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/TransactionTypes'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/GeographicalGraphScale'
+                -
+                    $ref: '#/parameters/ConversionRegisterSort'
+                -
+                    $ref: '#/parameters/ConversionRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/CountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/conversions/register/export:
+        get:
+            tags:
+                - 'Reports - Conversions'
+            description: 'Get a list of cpa conversions and reversals and revshare transactions'
+            operationId: reportsConversionsRegisterExport
+            parameters:
+                -
+                    $ref: '#/parameters/Offers'
+                -
+                    $ref: '#/parameters/Aliases'
+                -
+                    $ref: '#/parameters/Geos'
+                -
+                    $ref: '#/parameters/Zones'
+                -
+                    $ref: '#/parameters/Os'
+                -
+                    $ref: '#/parameters/TransactionTypes'
+                -
+                    $ref: '#/parameters/SubIds'
+                -
+                    $ref: '#/parameters/Range'
+                -
+                    $ref: '#/parameters/Start'
+                -
+                    $ref: '#/parameters/End'
+                -
+                    $ref: '#/parameters/GeographicalGraphScale'
+                -
+                    $ref: '#/parameters/ConversionRegisterSort'
+                -
+                    $ref: '#/parameters/ConversionRegisterSearchText'
+                -
+                    $ref: '#/parameters/Pagination'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ExportData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/summary:
+        get:
+            tags:
+                - 'Reports - Payments'
+            description: 'Get The most recent seven payments'
+            operationId: reportsRevshareSummary
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsSummaryDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments:
+        get:
+            tags:
+                - 'Reports - Payments'
+            description: 'Get payments information'
+            operationId: reportsPayments
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsSort'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/graph:
+        get:
+            tags:
+                - 'Reports - Payments'
+            description: 'Get payment information formatted for use in a graph'
+            operationId: reportsPaymentsGraph
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsGraphDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/count:
+        get:
+            tags:
+                - 'Reports - Payments'
+            description: 'Get the total number of payments'
+            operationId: reportsPaymentsCount
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsSort'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/CountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/export:
+        get:
+            tags:
+                - 'Reports - Payments'
+            description: 'Get a link to download payment information'
+            operationId: reportsPaymentsExport
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsSort'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ExportData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/cpa:
+        get:
+            tags:
+                - 'Reports - Payments - CPA Details'
+            description: 'Get a list of cpa conversions and reversals for a payment period'
+            operationId: reportPaymentsCpa
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsCpaSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsDetailsCpaDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/cpa/totals:
+        get:
+            tags:
+                - 'Reports - Payments - CPA Details'
+            description: 'Get summarized totals of payments data for cpa offers'
+            operationId: reportPaymentsCpa
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsCpaSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsTotalsData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/cpa/count:
+        get:
+            tags:
+                - 'Reports - Payments - CPA Details'
+            description: 'Get the total number of conversions and reverals'
+            operationId: reportsPaymentsCount
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsCpaSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/CountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/cpa/export:
+        get:
+            tags:
+                - 'Reports - Payments - CPA Details'
+            description: 'Get a link to download CPA payment details information'
+            operationId: reportsPaymentsExport
+            parameters:
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsCpaSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ExportData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/revshare:
+        get:
+            tags:
+                - 'Reports - Payments - Revshare Details'
+            description: 'Get a list of revshare transactions for a payment period'
+            operationId: reportPaymentsCpa
+            parameters:
+                -
+                    $ref: '#/parameters/RevshareTransactionTypes'
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsRevshareSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsDetailsRevshareDatas'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/revshare/totals:
+        get:
+            tags:
+                - 'Reports - Payments - Revshare Details'
+            description: 'Get summarized totals of payments data for revshare offers'
+            operationId: reportPaymentsCpa
+            parameters:
+                -
+                    $ref: '#/parameters/RevshareTransactionTypes'
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsRevshareSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PaymentsTotalsData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/revshare/count:
+        get:
+            tags:
+                - 'Reports - Payments - Revshare Details'
+            description: 'Get the total number of revshare transactions'
+            operationId: reportsPaymentsCount
+            parameters:
+                -
+                    $ref: '#/parameters/RevshareTransactionTypes'
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsRevshareSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/CountData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /reports/payments/details/revshare/export:
+        get:
+            tags:
+                - 'Reports - Payments - Revshare Details'
+            description: 'Get a link to download revshare payment details information'
+            operationId: reportsPaymentsExport
+            parameters:
+                -
+                    $ref: '#/parameters/RevshareTransactionTypes'
+                -
+                    $ref: '#/parameters/Pagination'
+                -
+                    $ref: '#/parameters/PaymentsDetailsRevshareSort'
+                -
+                    $ref: '#/parameters/Payments'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ExportData'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     /reports/revshare/summary:
         get:
             tags:
@@ -3102,7 +4157,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/RevshareCountData'
+                        $ref: '#/definitions/CountData'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -3170,7 +4225,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/RevshareExportData'
+                        $ref: '#/definitions/ExportData'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -3312,7 +4367,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/SafecartCampaignCountData'
+                        $ref: '#/definitions/CountData'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -3384,7 +4439,7 @@ paths:
                 200:
                     description: 'Successful responses'
                     schema:
-                        $ref: '#/definitions/SafecartCampaignExportData'
+                        $ref: '#/definitions/ExportData'
                 500:
                     description: 'Error Responses'
                     schema:
@@ -4194,31 +5249,154 @@ paths:
                     schema:
                         $ref: '#/definitions/Error'
 parameters:
-    Start:
-        name: start
+    ClickRegisterKeyword:
+        name: searchText
         in: query
-        description: 'Start date (YYYY-MM-DD)'
+        description: 'The IP or order reference to search for'
         required: true
         type: string
+    ClickRegisterSearchText:
+        name: searchText
+        in: query
+        description: 'The IP or order reference to search for'
+        required: true
+        type: string
+    ClickRegisterSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"sales","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - date
+                        - alias
+                        - offer
+                        - zone
+                        - country
+                        - os
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
+    ConversionRegisterSearchText:
+        name: searchText
+        in: query
+        description: 'The sub ID or order reference to search for'
+        required: true
+        type: string
+    ConversionRegisterSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"sales","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - reference
+                        - transactionType
+                        - payout
+                        - date
+                        - session
+                        - referrer
+                        - ip
+                        - alias
+                        - offer
+                        - zone
+                        - country
+                        - os
+                        - browser
+                        - campaign
+                        - clickId
+                        - subId
+                        - subId2
+                        - subId3
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
+    Aliases:
+        name: aliases
+        in: query
+        required: true
+        description: 'A JSON encoded array of alias IDs (eg ["1","2"])'
+        type: array
+        items:
+            type: string
     End:
         name: end
         in: query
         description: 'End date (YYYY-MM-DD)'
         required: true
         type: string
+    EndDate:
+        name: endDate
+        in: query
+        description: 'End date (YYYY-MM-DD)'
+        required: true
+        type: string
+    EndHour:
+        name: endHour
+        in: query
+        description: 'End hour (HH)'
+        required: true
+        type: string
+    GeographicalGraphScale:
+        name: graphScale
+        in: query
+        description: 'The x-axis scale to use for graph data for a geographical map'
+        required: true
+        type: string
+        enum:
+            - zones
+            - countries
+            - northAmerica
+            - centralAmerica
+            - southAmerica
+            - europe
+            - africa
+            - middleEast
+            - asia
+            - oceania
+            - unitedStates
+            - canada
+    Geos:
+        name: geos
+        in: query
+        required: true
+        description: 'A JSON encoded array of country (US and CA may also include region) IDs (eg ["CA","US-WA"])'
+        type: array
+        items:
+            type: string
+    Languages:
+        name: merchants
+        in: query
+        required: true
+        description: 'A JSON encoded array of language codes (eg ["en"])'
+        type: array
+        items:
+            type: string
+    Merchants:
+        name: merchants
+        in: query
+        required: true
+        description: 'A JSON encoded array of merchant IDs (eg ["1","22"])'
+        type: array
+        items:
+            type: string
     Offers:
         name: offers
         in: query
         required: true
         description: 'A JSON encoded array of offer IDs (eg ["1","2"])'
-        type: array
-        items:
-            type: string
-    OfferTypes:
-        name: offerTypes
-        in: query
-        required: true
-        description: 'A JSON encoded array of offer types (eg ["download","lead"])'
         type: array
         items:
             type: string
@@ -4230,11 +5408,19 @@ parameters:
         type: array
         items:
             type: string
-    Aliases:
-        name: aliases
+    OfferTypes:
+        name: offerTypes
         in: query
         required: true
-        description: 'A JSON encoded array of alias IDs (eg ["1","2"])'
+        description: 'A JSON encoded array of offer types (eg ["download","lead"])'
+        type: array
+        items:
+            type: string
+    Os:
+        name: os
+        in: query
+        required: true
+        description: 'A JSON encoded array of os names (eg ["Linux", "Mac OSX"])'
         type: array
         items:
             type: string
@@ -4254,6 +5440,147 @@ parameters:
                     type: number
                 end:
                     type: number
+    Payments:
+        name: payments
+        in: query
+        description: 'A payment fid'
+        required: true
+        type: string
+    Range:
+        name: range
+        in: query
+        description: 'The english name for the period being searched, encoded in camel case (eg. lastMonth or customRange)'
+        required: true
+        type: string
+    RevshareTransactionTypes:
+        name: transactionTypes
+        in: query
+        description: 'Revshare transaction types'
+        required: true
+        type: array
+        items:
+            type: string
+            enum:
+                - isSales
+                - isTrialConversion
+                - isRefunds
+                - isChargeBacks
+                - isRenewals
+    Start:
+        name: start
+        in: query
+        description: 'Start date (YYYY-MM-DD)'
+        required: true
+        type: string
+    StartDate:
+        name: startDate
+        in: query
+        description: 'Start date (YYYY-MM-DD)'
+        required: true
+        type: string
+    StartHour:
+        name: startHour
+        in: query
+        description: 'Start hour (HH)'
+        required: true
+        type: string
+    SubIds:
+        name: subIds
+        in: query
+        description: 'A JSON encoded array of sub IDs (eg ["this is my sub ID", "this is an alternate sub ID"])'
+        required: true
+        type: string
+    TransactionTypes:
+        name: transactionTypes
+        in: query
+        description: 'Revshare and CPA transaction types'
+        required: true
+        type: array
+        items:
+            type: string
+            enum:
+                - isSales
+                - isTrialConversion
+                - isRefunds
+                - isChargeBacks
+                - isRenewals
+                - isConversions
+                - isReverses
+    Zones:
+        name: zones
+        in: query
+        required: true
+        description: 'A JSON encoded array of continent names (eg ["North America", "Asia"])'
+        type: array
+        items:
+            type: string
+    PaymentsSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"id","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - id
+                        - period
+                        - paymentDate
+                        - grossPayout
+                        - payout
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
+    PaymentsDetailsCpaSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"id","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - reference
+                        - status
+                        - date
+                        - netSales
+                        - currency
+                        - offer
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
+    PaymentsDetailsRevshareSort:
+        name: sort
+        in: body
+        required: true
+        description: 'A JSON encoded object with the column to sort on and the sort direction (eg. {"col":"id","dir":"DESC"})'
+        schema:
+            type: object
+            properties:
+                col:
+                    type: string
+                    enum:
+                        - transactionId
+                        - transactionType
+                        - date
+                        - time
+                        - netSales
+                        - currency
+                        - offer
+                        - merchant
+                dir:
+                    type: string
+                    enum:
+                        - ASC
+                        - DESC
     RevshareGraphScale:
         name: graphScale
         in: query
