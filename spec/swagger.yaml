@@ -496,6 +496,18 @@ definitions:
                         type: string
                     customerBillingInfo:
                         $ref: '#/definitions/BillInfo'
+    Setting:
+        description: 'Dashboard customization setting object'
+        type: object
+        properties:
+            name:
+                type: string
+            length:
+                type: integer
+            order:
+                type: integer
+            visible:
+                type: boolean
     Destination:
         description: 'Destinations object'
         type: object
@@ -2770,6 +2782,30 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/CustomerAddress'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /dashboard/customization:
+        post:
+            tags:
+                - Dashboard
+            description: 'Get dashboard customization settings.'
+            operationId: dashboardCustomizationPost
+            parameters:
+                -
+                    name: items
+                    in: body
+                    description: 'Dashboard customization setting item list'
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Setting'
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/Response'
                 500:
                     description: 'Error Responses'
                     schema:
