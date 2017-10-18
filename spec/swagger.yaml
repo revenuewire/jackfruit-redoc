@@ -824,6 +824,102 @@ definitions:
                         type: array
                         items:
                             $ref: '#/definitions/CustomerOrder'
+    PathsDeleteObj:
+        description: 'Response object for delete action'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    message:
+                        type: string
+    NodeDeleteObj:
+        description: 'Response object for delete action'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                    message:
+                        type: string
+    PathObj:
+        description: 'Info of a path'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/PathInfo'
+    PathNodeObj:
+        description: 'Response which return a info of a path node'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/NodeInfo'
+    PathInfo:
+        description: 'Info of a path detailed'
+        type: object
+        properties:
+            id:
+                type: integer
+            name:
+                type: string
+            accountId:
+                type: integer
+            status:
+                type: string
+    NodeInfo:
+        description: 'Info of a node'
+        type: object
+        properties:
+            id:
+                type: integer
+            pathId:
+                type: integer
+            offerId:
+                type: integer
+            upgradeNodeId:
+                type: integer
+            downgradeNodeId:
+                type: integer
+            upLimit:
+                type: integer
+            downLimit:
+                type: integer
+            offerName:
+                type: string
+            offerSku:
+                type: string
+    AllPathInfos:
+        description: 'reponse for api call to get an array of paths'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/PathInfo'
+    AllPathNodes:
+        description: 'reponse for api call to get an array of nodes'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/NodeInfo'
     Profile:
         description: 'User''s Profile'
         type: object
@@ -2533,6 +2629,348 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/ListOrders'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /paths:
+        post:
+            tags:
+                - Paths
+            summary: 'Create path'
+            description: 'Create a path'
+            operationId: createPath
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: name
+                    in: formData
+                    description: 'Path name'
+                    type: string
+                    required: true
+                -
+                    name: accountId
+                    in: formData
+                    description: 'Merchant account id'
+                    type: integer
+                    required: true
+                -
+                    name: status
+                    in: formData
+                    description: 'Path status'
+                    type: string
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        get:
+            tags:
+                - Paths
+            summary: 'Get Paths'
+            description: 'Get all paths in the system which meet search criteria'
+            operationId: getAllPaths
+            parameters:
+                -
+                    name: name
+                    in: query
+                    description: 'Path Name'
+                    type: string
+                    required: false
+                -
+                    name: status
+                    in: query
+                    description: 'Path Status'
+                    type: string
+                    required: false
+            consumes:
+                - application/x-www-form-urlencoded
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/AllPathInfos'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/paths/{pathId}/':
+        delete:
+            tags:
+                - Paths
+            summary: 'Delete path'
+            description: 'Delete a path'
+            operationId: deletePath
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathsDeleteObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        get:
+            tags:
+                - Paths
+            summary: 'Get Path'
+            description: 'Get detailed info for a path'
+            operationId: getPathInfo
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        put:
+            tags:
+                - Paths
+            summary: 'Update path'
+            description: 'Update path'
+            operationId: updatePath
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path id'
+                    type: integer
+                    required: true
+                -
+                    name: name
+                    in: formData
+                    description: 'path name'
+                    type: string
+                    required: false
+                -
+                    name: status
+                    in: formData
+                    description: 'path status'
+                    type: string
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/paths/{pathId}/nodes/':
+        post:
+            tags:
+                - Paths
+            summary: 'Create path node'
+            description: 'Create a path node'
+            operationId: createNode
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path Id'
+                    type: integer
+                    required: true
+                -
+                    name: offerId
+                    in: formData
+                    description: 'Offer Id'
+                    type: integer
+                    required: true
+                -
+                    name: upgradeNodeId
+                    in: formData
+                    description: 'Upgrade Node Id of This Node'
+                    type: integer
+                    required: false
+                -
+                    name: downgradeNodeId
+                    in: formData
+                    description: 'Downgrade Node Id of This Node'
+                    type: integer
+                    required: false
+                -
+                    name: upLimit
+                    in: formData
+                    description: 'Up Limit of This Node'
+                    type: integer
+                    required: false
+                -
+                    name: downLimit
+                    in: formData
+                    description: 'Down Limit of This Node'
+                    type: integer
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathNodeObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        get:
+            tags:
+                - Paths
+            summary: 'Get nodes in a path'
+            description: 'Get nodes in a path'
+            operationId: getNodesInPath
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path Id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/AllPathNodes'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/paths/{pathId}/nodes/{nodeId}':
+        get:
+            tags:
+                - Paths
+            summary: 'Get a node'
+            description: 'Get a node by a node id'
+            operationId: getNode
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path Id'
+                    type: integer
+                    required: true
+                -
+                    name: nodeId
+                    in: path
+                    description: 'Node Id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathNodeObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        put:
+            tags:
+                - Paths
+            summary: 'Update a node'
+            description: 'Update a node'
+            operationId: updateNode
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path Id'
+                    type: integer
+                    required: true
+                -
+                    name: nodeId
+                    in: path
+                    description: 'Node Id'
+                    type: integer
+                    required: true
+                -
+                    name: upgradeNodeId
+                    in: formData
+                    description: 'Upgrade Node Id of This Node'
+                    type: integer
+                    required: false
+                -
+                    name: downgradeNodeId
+                    in: formData
+                    description: 'Downgrade Node Id of This Node'
+                    type: integer
+                    required: false
+                -
+                    name: upLimit
+                    in: formData
+                    description: 'Up Limit of This Node'
+                    type: integer
+                    required: false
+                -
+                    name: downLimit
+                    in: formData
+                    description: 'Down Limit of This Node'
+                    type: integer
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/PathNodeObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        delete:
+            tags:
+                - Paths
+            summary: 'Delete a node'
+            description: 'Delete a node by a node id'
+            operationId: deleteNode
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: pathId
+                    in: path
+                    description: 'Path Id'
+                    type: integer
+                    required: true
+                -
+                    name: nodeId
+                    in: path
+                    description: 'Node Id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/NodeDeleteObj'
                 500:
                     description: 'Error Responses'
                     schema:
