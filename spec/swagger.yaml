@@ -1536,6 +1536,36 @@ paths:
                     description: 'Postal code'
                     type: string
                     required: false
+                -
+                    name: address
+                    in: formData
+                    description: 'Billing address one'
+                    type: string
+                    required: false
+                -
+                    name: address2
+                    in: formData
+                    description: 'Billing address two'
+                    type: string
+                    required: false
+                -
+                    name: city
+                    in: formData
+                    description: 'Billing city'
+                    type: string
+                    required: false
+                -
+                    name: country
+                    in: formData
+                    description: 'Billing country'
+                    type: string
+                    required: false
+                -
+                    name: state
+                    in: formData
+                    description: 'Billing state or province'
+                    type: string
+                    required: false
             responses:
                 200:
                     description: 'Successful responses'
