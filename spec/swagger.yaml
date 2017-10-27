@@ -1193,6 +1193,107 @@ definitions:
             time:
                 type: string
                 description: 'format: 2000-01-31T18:30:45+00:00'
+    TransactionResponseObj:
+        description: 'Info of a path'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/TransactionDetails'
+    TransactionDetails:
+        description: 'Details if a transaction'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Transaction Id'
+            type:
+                type: string
+                description: 'Transaction Type'
+            date:
+                type: string
+                format: date-time
+            reference:
+                type: string
+            fullReference:
+                type: string
+            merchantName:
+                type: string
+            currency:
+                type: string
+            supportEmail:
+                type: string
+            totalPrice:
+                type: number
+            subTotalPrice:
+                type: number
+            totalPriceTax:
+                type: number
+            totalUSDPrice:
+                type: number
+            totalUSDPriceTax:
+                type: number
+            gateway:
+                type: string
+            gatewayReference:
+                type: string
+            extraParameters:
+                type: string
+            parentTransactionId:
+                type: integer
+            transactionItems:
+                type: array
+                items:
+                    $ref: '#/definitions/TransactionItem'
+            order:
+                $ref: '#/definitions/OrderDetailedObj'
+            shippingAddress:
+                $ref: '#/definitions/CustomerAddressObj'
+            billInfo:
+                $ref: '#/definitions/BillInfo'
+            customer:
+                $ref: '#/definitions/CustomerDetailedObj'
+    OrderDetailedObj:
+        description: 'Details of an order'
+        type: object
+        properties:
+            id:
+                type: integer
+            orderReference:
+                type: string
+            created:
+                type: string
+            hostId:
+                type: integer
+            customerGroupAccountId:
+                type: integer
+            merchantGroupAccountId:
+                type: integer
+            affiliateGroupAccountId:
+                type: integer
+            currencyCode:
+                type: string
+            language:
+                type: string
+            countryCode:
+                type: string
+            regionCode:
+                type: string
+    CustomerDetailedObj:
+        description: 'Customer object'
+        type: object
+        properties:
+            id:
+                type: integer
+            email:
+                type: string
+            firstName:
+                type: string
+            lastName:
+                type: string
+            timezone:
+                type: string
     UpdateEmailResponse:
         description: 'response to a successfull email update request'
         type: object
@@ -3514,6 +3615,31 @@ paths:
                             data:
                                 description: 'Test results'
                                 $ref: '#/definitions/PostbackTest'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/transactions/{transactionId}':
+        get:
+            tags:
+                - Transactions
+            summary: 'Get Transaction'
+            description: 'Get detailed info for a transaction'
+            operationId: getTransaction
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: transactionId
+                    in: path
+                    description: 'transaction id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/TransactionResponseObj'
                 500:
                     description: 'Error Responses'
                     schema:
