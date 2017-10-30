@@ -920,6 +920,159 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/NodeInfo'
+    ProductResponseObj:
+        description: 'Response object when call get product'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/ProductDetails'
+    ProductDetails:
+        description: 'Details if a product'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Product Id'
+            merchantId:
+                type: integer
+                description: 'Product owner merchant group account id'
+            sku:
+                type: string
+                description: 'Product sku'
+            name:
+                type: string
+                description: 'Product name'
+            desc:
+                type: string
+                description: 'Product description'
+            disabled:
+                type: boolean
+                description: 'If product is disabled'
+            created:
+                type: string
+                description: 'Product create time'
+            publishing:
+                type: string
+                description: 'If product is hidden, pending or active'
+            isRaSupportProduct:
+                type: boolean
+                description: 'If product is ra support product'
+            raSupportPhone:
+                type: string
+                description: 'Ra support phone'
+            raSalesPhone:
+                type: string
+                description: 'Ra sales phone'
+            softDesc:
+                type: string
+                description: 'Product soft description'
+            customerSupportName:
+                type: string
+                description: 'Customer support name'
+            customerSupportEmail:
+                type: string
+                description: 'Customer support email'
+            customerSupportUrl:
+                type: string
+                description: 'Customer support url'
+            customerSupportUrlName:
+                type: string
+                description: 'Customer support url name'
+            lmsEnabled:
+                type: boolean
+                description: 'If lms enabled'
+            receiptEnabled:
+                type: boolean
+                description: 'If receipt is enabled'
+            receiptType:
+                type: string
+                description: 'Recipt type'
+            lowKeyThreshold:
+                type: integer
+                description: 'Low license key threshod'
+            lowKeyEmail:
+                type: string
+                description: 'Low license key email'
+            daysRemainKeyThreshold:
+                type: integer
+                description: 'Days remain key threshold'
+            taxExempt:
+                type: boolean
+                description: 'If this propduct may exempt tax'
+            taxExemptionType:
+                type: string
+                description: 'Direction of tax exempt'
+            proration:
+                type: boolean
+                description: 'If this product is proration product'
+            outOfStockEmailTime:
+                type: string
+                description: 'Out of stock email sent time'
+            serverPostBack:
+                type: boolean
+                description: 'If session id added to linker'
+            isCpaShell:
+                type: boolean
+                description: 'If it is cpa shell'
+            allowAnnual:
+                type: boolean
+                description: 'If this product allow annual recurring'
+            extraData:
+                type: string
+                description: 'extra data'
+            shippable:
+                type: boolean
+                description: 'If it is shippable'
+            subscriptionProduct:
+                type: boolean
+                description: 'If this product is subscription product'
+            productType:
+                $ref: '#/definitions/ProductType'
+            productCategory:
+                $ref: '#/definitions/ProductCategory'
+    ProductCategory:
+        description: 'Details if a product Category'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Product Category Id'
+            fid:
+                type: string
+                description: 'Product Category Fid'
+            name:
+                type: string
+                description: 'Product Category Name'
+            desc:
+                type: string
+                description: 'Product Category Description'
+            created:
+                type: string
+                description: 'Create Time'
+            defaultRedirect:
+                type: string
+                description: 'Product Category Default Redirect'
+    ProductType:
+        description: 'Details if a product Type'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Product Type Id'
+            name:
+                type: string
+                description: 'Product Type Name'
+            desc:
+                type: string
+                description: 'Product Type Description'
+            disabled:
+                type: boolean
+                description: 'If Product Type Disabled'
+            created:
+                type: string
+                description: 'Create Time'
     Profile:
         description: 'User''s Profile'
         type: object
@@ -3102,6 +3255,31 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/NodeDeleteObj'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/products/{productId}':
+        get:
+            tags:
+                - Products
+            summary: 'Get Product'
+            description: 'Get detailed info for a product'
+            operationId: getProduct
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: productId
+                    in: path
+                    description: 'product id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ProductResponseObj'
                 500:
                     description: 'Error Responses'
                     schema:
