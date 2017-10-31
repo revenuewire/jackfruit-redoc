@@ -280,6 +280,35 @@ definitions:
                 type: string
             payout:
                 type: string
+    Coupon:
+        description: 'Coupon object'
+        type: object
+        required:
+            - id
+            - name
+            - description
+            - discountAmount
+            - discountType
+            - startDate
+            - endDate
+            - code
+        properties:
+            id:
+                type: integer
+            name:
+                type: string
+            description:
+                type: string
+            discountAmount:
+                type: string
+            discountType:
+                type: string
+            startDate:
+                type: string
+            endDate:
+                type: string
+            code:
+                type: string
     CpaPayoutPolicy:
         properties:
             id:
@@ -528,6 +557,8 @@ definitions:
             isCustom:
                 type: boolean
             geos:
+                type: string
+            couponId:
                 type: string
     Domain:
         description: Domain
@@ -2122,6 +2153,38 @@ paths:
                         properties:
                             response:
                                 $ref: '#/definitions/Response'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /coupons:
+        get:
+            tags:
+                - Coupons
+            description: 'Get list of `Coupon` objects.'
+            operationId: couponsGet
+            parameters:
+                -
+                    name: catalogId
+                    in: query
+                    description: 'Offer''s catalog id'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Array containing coupons'
+                                type: array
+                                items:
+                                    $ref: '#/definitions/Coupon'
                 500:
                     description: 'Error Responses'
                     schema:
