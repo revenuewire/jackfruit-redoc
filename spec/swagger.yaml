@@ -694,6 +694,21 @@ definitions:
                 type: string
             affiliateName:
                 type: string
+    MerchantDetailsResponse:
+        description: 'Merchant info including block infos'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
+                properties:
+                    merchantId:
+                        type: integer
+                    merchantName:
+                        type: string
+                    merchantFid:
+                        type: string
     Transaction:
         description: Transaction
         type: object
@@ -2869,6 +2884,31 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/Merchant'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/merchants/{merchantId}':
+        get:
+            tags:
+                - Merchants
+            summary: 'Get merchant info'
+            description: 'Get merchant info'
+            operationId: getMerchant
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: merchantId
+                    in: path
+                    description: 'Merchant group account id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/MerchantDetailsResponse'
                 500:
                     description: 'Error Responses'
                     schema:
