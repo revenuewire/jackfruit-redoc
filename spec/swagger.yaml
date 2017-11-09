@@ -709,6 +709,177 @@ definitions:
                         type: string
                     merchantFid:
                         type: string
+    OfferResponseObj:
+        description: 'Response object when call get offer'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/OfferDetails'
+    OfferDetails:
+        description: 'Details of a Offer'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Offer Id'
+            productId:
+                type: integer
+                description: 'Product Id'
+            sku:
+                type: string
+                description: 'Offer sku'
+            name:
+                type: string
+                description: 'Offer name'
+            desc:
+                type: string
+                description: 'Offer description'
+            affiliatePayout:
+                $ref: '#/definitions/AffiliatePayoutItem'
+            created:
+                type: string
+                description: 'Offer create time'
+            type:
+                type: string
+                description: 'Offer type'
+            publishing:
+                type: string
+                description: 'If Offer is published'
+            processingFeeFixed:
+                type: number
+                description: 'Fixed processing fee'
+            processingFeePercent:
+                type: number
+                description: 'Processing fee percentage'
+            isRecurring:
+                type: boolean
+                description: 'If offer is recurring'
+            isTrial:
+                type: boolean
+                description: 'If offer is trial'
+            isAffiliatePayoutOverrideExempt:
+                type: boolean
+                description: 'If there is a payout override'
+            offerPrices:
+                $ref: '#/definitions/OfferPrices'
+            recurringOffer:
+                $ref: '#/definitions/RecurringOffer'
+            trialOffer:
+                $ref: '#/definitions/TrialOffer'
+    RecurringOffer:
+        description: 'Recurring Offer'
+        type: object
+        properties:
+            frequencyUnit:
+                type: string
+                description: 'Recurring Frequency Unit'
+            frequencyValue:
+                type: number
+                description: 'Recurring Frequency Value'
+            isFixTermOffer:
+                type: boolean
+                description: 'If It is Fix Term Offer'
+            fixTermValue:
+                type: number
+                description: 'Fix Term Value'
+            billingDateUnit:
+                type: string
+                description: 'Billing Date Unit'
+            billingDateValue:
+                type: number
+                description: 'Billing Date Value'
+            reminderSendEmail:
+                type: boolean
+                description: 'If Need to Send Reminder Email'
+            reminderDateUnit:
+                type: string
+                description: 'Reminder Date Unit'
+            reminderDateValue:
+                type: number
+                description: 'Reminder Date Value'
+            recurringOfferIntervals:
+                type: array
+                items:
+                    $ref: '#/definitions/RecurringOfferInterval'
+    RecurringOfferInterval:
+        description: 'Recurring Offer Interval'
+        type: object
+        properties:
+            id:
+                type: integer
+                description: 'Recurring Offer Interval Id'
+            interval:
+                type: number
+                description: 'Recurring Offer Interval'
+            offerId:
+                type: number
+                description: 'Offer Id Linked to Interval'
+            affiliatePayout:
+                $ref: '#/definitions/AffiliatePayoutItem'
+            recurringOfferIntervalPrices:
+                $ref: '#/definitions/OfferPrices'
+    TrialOffer:
+        description: 'Recurring Offer'
+        type: object
+        properties:
+            trialDateUnit:
+                type: string
+                description: 'Trial Date Unit'
+            trialDateValue:
+                type: number
+                description: 'Trial Date Value'
+            trialExpiryNotificationTime:
+                type: integer
+                description: 'Trial Expiry Notification Time'
+            affiliatePayout:
+                $ref: '#/definitions/AffiliatePayoutItem'
+            trialOfferPrices:
+                $ref: '#/definitions/OfferPrices'
+    AffiliatePayoutItem:
+        description: 'A affiliate payout'
+        type: object
+        properties:
+            payoutType:
+                type: string
+                description: 'Payout type'
+            amount:
+                type: number
+                description: 'Payout amount'
+    OfferPriceItem:
+        description: 'A basic offer price'
+        type: object
+        properties:
+            currencyCode:
+                type: string
+                description: 'Currency code of this price'
+            amount:
+                type: number
+                description: 'Offer price amount'
+    CountryOfferPriceItem:
+        description: 'A country offer price'
+        type: object
+        properties:
+            countryCode:
+                type: string
+                description: 'Country code of this price'
+            defaultPrice:
+                $ref: '#/definitions/OfferPriceItem'
+            fallBackPrice:
+                $ref: '#/definitions/OfferPriceItem'
+    OfferPrices:
+        description: 'Offer prices of a offer which also includes country prices'
+        type: object
+        properties:
+            prices:
+                type: array
+                items:
+                    $ref: '#/definitions/OfferPriceItem'
+            countryPrices:
+                type: array
+                items:
+                    $ref: '#/definitions/CountryOfferPriceItem'
     Transaction:
         description: Transaction
         type: object
@@ -2938,6 +3109,31 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/Merchant'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/offers/{offerId}/':
+        get:
+            tags:
+                - Offers
+            summary: 'Get Offer'
+            description: 'Get detailed info for a offer'
+            operationId: getOffer
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: offerId
+                    in: path
+                    description: 'offer id'
+                    type: integer
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/OfferResponseObj'
                 500:
                     description: 'Error Responses'
                     schema:
