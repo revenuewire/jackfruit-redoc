@@ -3583,99 +3583,23 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
-    /profiles:
-        get:
-            tags:
-                - Profiles
-            description: 'Gets `Profiles` object.'
-            responses:
-                200:
-                    description: 'Successful responses'
-                    schema:
-                        $ref: '#/definitions/Profile'
-                500:
-                    description: 'Error Responses'
-                    schema:
-                        $ref: '#/definitions/Error'
+    /profiles/save-app-config:
         put:
             tags:
                 - Profiles
-            description: 'Update `Profiles` object.'
+            description: 'Updates a `Profiles` application config.'
             parameters:
                 -
-                    name: first_name
+                    name: app
                     in: query
-                    description: 'User''s first name'
+                    description: 'The application name'
                     type: string
                     required: true
                 -
-                    name: last_name
+                    name: config
                     in: query
-                    description: 'User''s lastname'
+                    description: 'An encoded array in the format config[<appname>][<key>]=<value>'
                     type: string
-                    required: true
-                -
-                    name: email
-                    in: query
-                    description: 'User''s email'
-                    type: string
-                    required: true
-                -
-                    name: timezone
-                    in: query
-                    description: 'Setup your timezone.'
-                    type: string
-                -
-                    name: default_dashboard
-                    in: query
-                    description: 'User''s default dashboard'
-                    type: string
-                    enum:
-                        - Sales
-                        - Chargebacks
-                -
-                    name: default_product_view
-                    in: query
-                    description: 'User''s default product view.'
-                    type: string
-                    enum:
-                        - List
-                        - Grid
-            responses:
-                200:
-                    description: 'Successful responses'
-                    schema:
-                        $ref: '#/definitions/Profile'
-                500:
-                    description: 'Error Responses'
-                    schema:
-                        $ref: '#/definitions/Error'
-    /profiles/change-password:
-        put:
-            tags:
-                - Profiles
-            description: 'Update `Profiles` password.'
-            parameters:
-                -
-                    name: current_password
-                    in: query
-                    description: 'User''s current password'
-                    type: string
-                    format: password
-                    required: true
-                -
-                    name: new_password
-                    in: query
-                    description: 'User''s new password'
-                    type: string
-                    format: password
-                    required: true
-                -
-                    name: confirm_password
-                    in: query
-                    description: 'User''s confirm password'
-                    type: string
-                    format: password
                     required: true
             responses:
                 200:
