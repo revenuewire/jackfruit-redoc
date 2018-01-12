@@ -1290,36 +1290,6 @@ definitions:
             created:
                 type: string
                 description: 'Create Time'
-    Profile:
-        description: 'User''s Profile'
-        type: object
-        properties:
-            id:
-                type: integer
-            username:
-                type: string
-            email:
-                type: string
-            firstName:
-                type: string
-            lastName:
-                type: string
-            timezone:
-                type: string
-            accountId:
-                type: integer
-            passwordExpiryDates:
-                type: integer
-            defaultDashboard:
-                type: string
-            defaultProductView:
-                type: string
-            lastLoginDate:
-                type: string
-            lastLoginIp:
-                type: string
-            language:
-                type: string
     CancelProfileResponse:
         description: 'Response for user cancel profile api call'
         type: object
@@ -3583,33 +3553,6 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
-    /profiles/save-app-config:
-        put:
-            tags:
-                - Profiles
-            description: 'Updates a `Profiles` application config.'
-            parameters:
-                -
-                    name: app
-                    in: query
-                    description: 'The application name'
-                    type: string
-                    required: true
-                -
-                    name: config
-                    in: query
-                    description: 'An encoded array in the format config[<appname>][<key>]=<value>'
-                    type: string
-                    required: true
-            responses:
-                200:
-                    description: 'Successful responses'
-                    schema:
-                        $ref: '#/definitions/Profile'
-                500:
-                    description: 'Error Responses'
-                    schema:
-                        $ref: '#/definitions/Error'
     '/subscriptions/{id}':
         get:
             tags:
@@ -4231,6 +4174,40 @@ paths:
                     format: password
                     required: true
                     type: string
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/User'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/users/{id}/save-app-config':
+        put:
+            tags:
+                - Users
+            description: 'Updates a `Users` application config.'
+            operationId: userSaveAppConfig
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'User id'
+                    required: true
+                    type: integer
+                -
+                    name: app
+                    in: query
+                    description: 'The application name'
+                    type: string
+                    required: true
+                -
+                    name: config
+                    in: query
+                    description: 'An encoded array in the format config[<appname>][<key>]=<value>'
+                    type: string
+                    required: true
             responses:
                 200:
                     description: 'Successful responses'
