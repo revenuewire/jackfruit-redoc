@@ -144,6 +144,34 @@ definitions:
                 type: array
                 items:
                     $ref: '#/definitions/Alias'
+    Banner:
+        description: 'Banner object'
+        type: object
+        required:
+            - id
+            - img
+        properties:
+            id:
+                description: 'filename of banner in S3'
+                type: string
+            img:
+                description: 'S3 url of banner'
+                type: string
+            url:
+                description: 'click through link of banner'
+                type: string
+    BannerType:
+        description: 'Banner Type object'
+        type: object
+        required:
+            - response
+            - data
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                description: 'Banner Type'
+                type: string
     BillInfoResponse:
         type: object
         properties:
@@ -1922,6 +1950,117 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/Aliases'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /banners:
+        get:
+            tags:
+                - Banners
+            description: 'Get list of `Banner` objects.'
+            operationId: bannersGet
+            parameters:
+                -
+                    name: type
+                    in: query
+                    description: 'type of banner'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Array containing banners'
+                                type: array
+                                items:
+                                    $ref: '#/definitions/Banner'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/banners/{id}/dismiss':
+        put:
+            tags:
+                - Banners
+            description: 'Dismiss a specific banner'
+            operationId: bannerDismiss
+            parameters:
+                -
+                    name: id
+                    in: path
+                    description: 'Banner id'
+                    type: integer
+                    required: true
+                -
+                    name: type
+                    in: query
+                    description: 'type of banner'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        required:
+                            - response
+                            - data
+                        properties:
+                            response:
+                                $ref: '#/definitions/Response'
+                            data:
+                                description: 'Id of banner dismissed'
+                                type: string
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    /banners/dismissedTypes:
+        put:
+            tags:
+                - Banners
+            description: 'Dismiss a specific banner type'
+            operationId: bannerDismissTypePut
+            parameters:
+                -
+                    name: type
+                    in: query
+                    description: 'Banner type being dismissed'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/BannerType'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+        delete:
+            tags:
+                - Banners
+            description: 'Restore a specific banner type so that it will display again'
+            operationId: bannerDismissTypeDelete
+            parameters:
+                -
+                    name: type
+                    in: query
+                    description: 'Banner type being restored'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/BannerType'
                 500:
                     description: 'Error Responses'
                     schema:
