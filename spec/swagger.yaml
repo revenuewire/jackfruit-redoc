@@ -2693,6 +2693,12 @@ paths:
                     type: string
                     required: true
                 -
+                    name: regionCode
+                    in: formData
+                    description: 'State code'
+                    type: string
+                    required: false
+                -
                     name: city
                     in: formData
                     description: City
