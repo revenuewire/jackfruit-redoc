@@ -179,6 +179,13 @@ definitions:
                 $ref: '#/definitions/Response'
             data:
                 $ref: '#/definitions/BillInfo'
+    CardUpdateResponse:
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                $ref: '#/definitions/CardInfo'
     PaypalUrl:
         description: 'Paypal Url'
         type: object
@@ -190,6 +197,21 @@ definitions:
                 properties:
                     paypalUrl:
                         type: string
+    CardInfo:
+        type: object
+        properties:
+            cardHolderFullName:
+                type: string
+                description: 'Card holder name'
+            cardNumber:
+                type: string
+                description: cardNumber
+            expiry:
+                type: string
+                description: 'card expiry'
+            cardCVV:
+                type: string
+                description: 'card cvv'
     CatalogOffer:
         description: 'Catalog Offer object'
         properties:
@@ -2155,6 +2177,108 @@ paths:
                     description: 'Error Responses'
                     schema:
                         $ref: '#/definitions/Error'
+    /billings/update-card:
+        put:
+            tags:
+                - Billings
+            description: 'Update customer billing info and apply changes to all related profiles'
+            operationId: billingInfoAllUpdate
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: customerEmail
+                    in: formData
+                    description: 'Customer email'
+                    type: string
+                    required: true
+                -
+                    name: oldFirstSix
+                    in: formData
+                    description: 'The first six digits for the old card'
+                    type: string
+                    required: true
+                -
+                    name: oldLastFour
+                    in: formData
+                    description: 'The last four digits for the old card'
+                    type: string
+                    required: true
+                -
+                    name: oldCardExpiry
+                    in: formData
+                    description: 'Credit Card expiry for the old card'
+                    type: string
+                    required: true
+                -
+                    name: cardHolderFullName
+                    in: formData
+                    description: 'Card holder full name'
+                    type: string
+                    required: true
+                -
+                    name: cardNumber
+                    in: formData
+                    description: 'Credit Card number'
+                    type: string
+                    required: true
+                -
+                    name: cardExpiry
+                    in: formData
+                    description: 'Credit Card expiry'
+                    type: string
+                    required: true
+                -
+                    name: cardCCV
+                    in: formData
+                    description: 'Credit CCV'
+                    type: string
+                    required: false
+                -
+                    name: postalCode
+                    in: formData
+                    description: 'Postal code'
+                    type: string
+                    required: false
+                -
+                    name: address
+                    in: formData
+                    description: 'Billing address one'
+                    type: string
+                    required: false
+                -
+                    name: address2
+                    in: formData
+                    description: 'Billing address two'
+                    type: string
+                    required: false
+                -
+                    name: city
+                    in: formData
+                    description: 'Billing city'
+                    type: string
+                    required: false
+                -
+                    name: country
+                    in: formData
+                    description: 'Billing country'
+                    type: string
+                    required: false
+                -
+                    name: state
+                    in: formData
+                    description: 'Billing state or province'
+                    type: string
+                    required: false
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/CardUpdateResponse'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
     /billings/update-paypal:
         put:
             tags:
@@ -2215,7 +2339,7 @@ paths:
                     in: formData
                     description: 'recurring transaction item to be updated'
                     type: string
-                    required: false
+                    required: true
             responses:
                 200:
                     description: 'Successful responses'
