@@ -557,6 +557,8 @@ definitions:
                     nextBillingDate:
                         type: string
                         format: date
+                    nextBillingAmount:
+                        type: number
                     finalBillingDate:
                         type: string
                         format: date
