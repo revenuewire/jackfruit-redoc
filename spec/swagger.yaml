@@ -1342,14 +1342,6 @@ definitions:
             created:
                 type: string
                 description: 'Create Time'
-    RebillMigrationResponse:
-        description: 'Rebill migration response'
-        type: object
-        properties:
-            response:
-                $ref: '#/definitions/Response'
-            data:
-                type: object
     CancelProfileResponse:
         description: 'Response for user cancel profile api call'
         type: object
@@ -3828,49 +3820,6 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/ProductResponseObj'
-                500:
-                    description: 'Error Responses'
-                    schema:
-                        $ref: '#/definitions/Error'
-    '/rebillmigrations/{recurringTransactionItemId}/rebill/':
-        post:
-            tags:
-                - RebillMigrationss
-            summary: 'Use card info from vault to enable a paused rebill task'
-            description: 'Use card info from vault to enable a paused rebill task'
-            operationId: rebill
-            consumes:
-                - application/x-www-form-urlencoded
-            parameters:
-                -
-                    name: recurringTransactionItemId
-                    in: path
-                    description: 'Recurring transaction item id'
-                    type: integer
-                    required: true
-                -
-                    name: cardNumber
-                    in: formData
-                    description: 'Credit card number'
-                    type: string
-                    required: true
-                -
-                    name: cardExpiry
-                    in: formData
-                    description: 'Card Expiry MMYY'
-                    type: string
-                    required: true
-                -
-                    name: selectedGateway
-                    in: formData
-                    description: 'Gateway Name which should be the exact same as what sent by jackfruit'
-                    type: string
-                    required: true
-            responses:
-                200:
-                    description: 'Successful responses'
-                    schema:
-                        $ref: '#/definitions/RebillMigrationResponse'
                 500:
                     description: 'Error Responses'
                     schema:
