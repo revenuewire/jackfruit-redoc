@@ -1350,6 +1350,14 @@ definitions:
                 $ref: '#/definitions/Response'
             data:
                 type: object
+    RefundMigrationResponse:
+        description: 'Refund migration response'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
     CancelProfileResponse:
         description: 'Response for user cancel profile api call'
         type: object
@@ -3871,6 +3879,43 @@ paths:
                     description: 'Successful responses'
                     schema:
                         $ref: '#/definitions/RebillMigrationResponse'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/refundmigrations/{transactionId}/refund/':
+        post:
+            tags:
+                - RefundMigrationss
+            summary: 'Use card info from vault to give customer credit by pavision'
+            description: 'Use card info from vault to give customer credit by pavision'
+            operationId: refund
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: transactionId
+                    in: path
+                    description: 'Pending refund transaction id'
+                    type: integer
+                    required: true
+                -
+                    name: cardNumber
+                    in: formData
+                    description: 'Credit card number'
+                    type: string
+                    required: true
+                -
+                    name: cardExpiry
+                    in: formData
+                    description: 'Card Expiry MMYY'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/RefundMigrationResponse'
                 500:
                     description: 'Error Responses'
                     schema:
