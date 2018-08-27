@@ -715,6 +715,14 @@ definitions:
                 type: string
             text:
                 type: string
+    ActivateGatewayResponse:
+        description: 'Activate gateway response'
+        type: object
+        properties:
+            response:
+                $ref: '#/definitions/Response'
+            data:
+                type: object
     Merchant:
         description: 'Merchant info including block infos'
         type: object
@@ -3281,6 +3289,37 @@ paths:
                     description: 'Successful Responses'
                     schema:
                         $ref: '#/definitions/CountryList'
+                500:
+                    description: 'Error Responses'
+                    schema:
+                        $ref: '#/definitions/Error'
+    '/merchantgatewayconfigs/{clientId}/versions/{versionId}/activate/':
+        post:
+            tags:
+                - MerchantGatewayConfigs
+            summary: 'Activate the gateway policy for a merchant'
+            description: 'Activate the gateway policy for a merchant'
+            operationId: activate
+            consumes:
+                - application/x-www-form-urlencoded
+            parameters:
+                -
+                    name: clientId
+                    in: path
+                    description: 'client Id'
+                    type: string
+                    required: true
+                -
+                    name: versionId
+                    in: path
+                    description: 'version Id'
+                    type: string
+                    required: true
+            responses:
+                200:
+                    description: 'Successful responses'
+                    schema:
+                        $ref: '#/definitions/ActivateGatewayResponse'
                 500:
                     description: 'Error Responses'
                     schema:
