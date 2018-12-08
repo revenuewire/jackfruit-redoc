@@ -1,0 +1,4626 @@
+swagger: '2.0'
+info:
+  version: v1
+  title: RevenueWire JackFruit REST API (Alpha)
+  description: This API *does not* represent the final product. Some of the APIs listed below are *highly experimental* and *will likely change* before the final release. They may come with *crashes and bugs* and may potentially cause *data loss*.
+basePath: /rest/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  JWT:
+    type: apiKey
+    in: header
+    name: X-Authorization-JWT
+    description: 'JWT TOKEN (https://jwt.io)'
+  API-KEY:
+    type: apiKey
+    in: header
+    name: X-API-KEY
+    description: Platform User API KEY
+security:
+  - API-KEY: []
+  - JWT: []
+definitions:
+  Context:
+    description: Key value map
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+  Response:
+    description: Response Object
+    type: object
+    properties:
+      status:
+        type: boolean
+      message:
+        type: string
+      context:
+        type: array
+        items:
+          $ref: '#/definitions/Context'
+  Error:
+    description: Server Error Response
+    type: object
+    properties:
+      code:
+        type: boolean
+        description: HTTP STATUS CODE
+      message:
+        type: string
+      key:
+        type: string
+        description: error message key
+      context:
+        type: array
+        items:
+          $ref: '#/definitions/Context'
+  AffiliateLink:
+    description: Affiliate Link object
+    type: object
+    required:
+      - url
+      - destinationId
+    properties:
+      url:
+        type: string
+      destinationId:
+        type: integer
+      aliasId:
+        type: integer
+  MerchantTerms:
+    description: Merchant additional terms
+    properties:
+      id:
+        type: integer
+      acceptRequired:
+        type: string
+      terms:
+        type: string
+    required:
+      - id
+      - acceptRequired
+      - terms
+  AffiliateAccount:
+    description: Affiliate Account object
+    type: object
+    properties:
+      accountFid:
+        type: string
+      apiKey:
+        type: string
+      companyName:
+        type: string
+      website:
+        type: string
+      phone:
+        type: string
+      contactName:
+        type: string
+      technicalEmail:
+        type: string
+      address:
+        type: string
+      city:
+        type: string
+      stateProvince:
+        type: string
+      zipPostalCode:
+        type: string
+      gstNumber:
+        type: string
+      taxRegion:
+        type: string
+      paymentThreshold:
+        type: integer
+  Alias:
+    description: Alias object
+    type: object
+    required:
+      - id
+      - alias
+    properties:
+      id:
+        type: integer
+      alias:
+        type: string
+  Aliases:
+    description: Aliases
+    type: object
+    required:
+      - response
+      - data
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Alias'
+  Banner:
+    description: Banner object
+    type: object
+    required:
+      - id
+      - img
+    properties:
+      id:
+        description: filename of banner in S3
+        type: string
+      img:
+        description: S3 url of banner
+        type: string
+      url:
+        description: click through link of banner
+        type: string
+  BannerType:
+    description: Banner Type object
+    type: object
+    required:
+      - response
+      - data
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        description: Banner Type
+        type: string
+  BillInfoResponse:
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/BillInfo'
+  CardUpdateResponse:
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/CardInfo'
+  PaypalUrl:
+    description: Paypal Url
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          paypalUrl:
+            type: string
+  CardInfo:
+    type: object
+    properties:
+      cardHolderFullName:
+        type: string
+        description: Card holder name
+      cardNumber:
+        type: string
+        description: cardNumber
+      expiry:
+        type: string
+        description: card expiry
+      cardCVV:
+        type: string
+        description: card cvv
+  CatalogOffer:
+    description: Catalog Offer object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      offerType:
+        type: string
+        enum:
+          - RevShare
+          - SALE
+          - LEAD
+          - INSTALL
+          - DOWNLOAD
+          - SIGNUP
+          - OTHER
+      productCategory:
+        type: string
+      promoMethods:
+        type: array
+        items:
+          type: string
+      payout:
+        type: number
+      payoutType:
+        type: string
+        enum:
+          - NONE
+          - FIXED
+          - PERCENT
+      epc:
+        type: number
+      eps:
+        type: number
+      cvr:
+        type: number
+      description:
+        type: string
+      boxshotLink:
+        type: string
+      previewLink:
+        type: string
+      isCpa:
+        type: boolean
+      languages:
+        type: array
+        items:
+          type: string
+      displayPrice:
+        type: number
+      geos:
+        type: array
+        items:
+          type: string
+      linker:
+        type: integer
+        enum:
+          - 1
+          - 2
+    required:
+      - id
+      - name
+      - offerType
+      - productCategory
+      - promoMethods
+      - payout
+      - payoutType
+      - epc
+      - eps
+      - cvr
+      - description
+      - boxshotLink
+      - previewLink
+      - isCpa
+      - languages
+      - displayPrice
+      - geos
+      - linker
+  CatalogOfferDetail:
+    allOf:
+      - $ref: '#/definitions/CatalogOffer'
+      - properties:
+          marketingMaterials:
+            type: array
+            items:
+              $ref: '#/definitions/MarketingMaterial'
+          merchantTerm:
+            description: RevShare only
+            $ref: '#/definitions/MerchantTerms'
+          geos:
+            description: CPA only
+            type: array
+            items:
+              $ref: '#/definitions/Geo'
+          policy:
+            description: CPA only
+            $ref: '#/definitions/CpaPayoutPolicy'
+          terms:
+            type: string
+    required:
+      - marketingMaterials
+  MarketingMaterial:
+    properties:
+      filename:
+        type: string
+      url:
+        type: string
+      dimensions:
+        type: string
+  Geo:
+    properties:
+      code:
+        type: string
+      payout:
+        type: string
+  Coupon:
+    description: Coupon object
+    type: object
+    required:
+      - id
+      - name
+      - description
+      - discountAmount
+      - discountType
+      - startDate
+      - endDate
+      - code
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      discountAmount:
+        type: string
+      discountType:
+        type: string
+      startDate:
+        type: string
+      endDate:
+        type: string
+      code:
+        type: string
+  CpaPayoutPolicy:
+    properties:
+      id:
+        type: integer
+      hasApplied:
+        type: boolean
+      acceptedTerms:
+        type: boolean
+      type:
+        type: string
+        enum:
+          - PUBLIC
+          - APPLY_TO_RUN
+          - LIMIT
+      terms:
+        type: string
+  CustomersRespone:
+    description: Order details of this order
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerObj'
+  CustomerObj:
+    description: Customer object
+    type: object
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      timezone:
+        type: string
+      created:
+        type: string
+      addressess:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerAddressObj'
+      phones:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerPhoneObj'
+  Customer:
+    description: Customer object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/CustomerObj'
+  CustomerAddressObj:
+    description: Customer's Addresses
+    type: object
+    properties:
+      id:
+        type: integer
+      customerAccountId:
+        type: integer
+      transactionId:
+        type: integer
+      name:
+        type: string
+      address:
+        type: string
+      address2:
+        type: string
+      countryCode:
+        type: string
+      regionCode:
+        type: string
+      city:
+        type: string
+      postalCode:
+        type: string
+      type:
+        type: string
+  CustomerPhoneObj:
+    description: Customer phone
+    type: object
+    properties:
+      id:
+        type: integer
+      customerAccountId:
+        type: integer
+      phoneNumber:
+        type: string
+      countryCode:
+        type: string
+      type:
+        type: string
+  CustomerAddress:
+    description: Customer's Addresses
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/CustomerAddressObj'
+  CustomerOffers:
+    description: Customer offers object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerOffersObj'
+  CustomerTransactions:
+    description: Customer transactions object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+  CustomerOffersObj:
+    description: Customer Offer
+    type: object
+    properties:
+      offerId:
+        type: integer
+        description: Offer Id
+      transactionItemId:
+        type: integer
+        description: Transaction Item Id
+      transactionId:
+        type: integer
+        description: Transaction Id
+      name:
+        type: string
+        description: Offer Name
+      translatedName:
+        type: string
+        description: Translated Offer Name
+      productName:
+        type: string
+        description: Product Name
+      translatedProductName:
+        type: string
+        description: Translated Product Name
+      receiptUrl:
+        type: string
+        description: Receipt Url for this transaction
+      isRecurring:
+        type: boolean
+      isTrial:
+        type: boolean
+      shippingAddress:
+        $ref: '#/definitions/CustomerAddressObj'
+      transactionItem:
+        description: Transaction Item
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Transaction Item Id
+          sku:
+            type: string
+          quantity:
+            type: integer
+          price:
+            type: number
+          priceTax:
+            type: number
+          usdPrice:
+            type: number
+          productName:
+            type: string
+          usdPriceTax:
+            type: number
+          image:
+            type: string
+      recurringTransactionItem:
+        description: Recurring Item
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Recurring Transaction Item Id
+          offerId:
+            type: integer
+          initialSaleDate:
+            type: string
+            format: date
+          nextBillingDate:
+            type: string
+            format: date
+          nextBillingAmount:
+            type: number
+          finalBillingDate:
+            type: string
+            format: date
+          interval:
+            type: integer
+          rebillFrequencyType:
+            type: string
+          rebillFrequencyValue:
+            type: integer
+          deactivatedDate:
+            type: string
+            format: date
+          deactivatedType:
+            type: string
+          status:
+            type: string
+          customerBillingInfo:
+            $ref: '#/definitions/BillInfo'
+  Setting:
+    description: Dashboard customization setting object
+    type: object
+    properties:
+      name:
+        type: string
+      length:
+        type: integer
+      order:
+        type: integer
+      visible:
+        type: boolean
+  Destination:
+    description: Destinations object
+    type: object
+    required:
+      - id
+      - fid
+      - name
+      - url
+    properties:
+      id:
+        type: integer
+      fid:
+        type: string
+      name:
+        type: string
+      url:
+        type: string
+      isCustom:
+        type: boolean
+      geos:
+        type: string
+      couponId:
+        type: string
+  Domain:
+    description: Domain
+    type: object
+    properties:
+      id:
+        type: integer
+      key:
+        type: string
+        description: Unique identification of the domain resource
+      domain:
+        type: string
+      type:
+        type: string
+      merchant:
+        type: string
+      status:
+        type: string
+      emails:
+        description: A list of emails if it is an email domain
+        type: array
+        items:
+          $ref: '#/definitions/DomainEmail'
+  DomainEmailLabel:
+    description: Email Label
+    type: object
+    properties:
+      lang:
+        type: string
+      label:
+        type: string
+  DomainEmail:
+    description: Domain Email
+    type: object
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+      labels:
+        type: array
+        items:
+          $ref: '#/definitions/DomainEmailLabel'
+      primary:
+        type: boolean
+        default: true
+  newDomain:
+    description: Add new domain
+    type: object
+    properties:
+      email:
+        type: string
+      labels:
+        type: array
+        items:
+          $ref: '#/definitions/DomainEmailLabel'
+  SupportedLanguages:
+    description: Supported Languages
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/SupportedLanguage'
+  SupportedLanguage:
+    description: Language Object
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+  CountryList:
+    description: A list of countries
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Country'
+  Country:
+    description: Country Object
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+      states:
+        type: array
+        items:
+          $ref: '#/definitions/State'
+  State:
+    description: State Object
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+  ActivateGatewayResponse:
+    description: Activate gateway response
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+  Merchant:
+    description: Merchant info including block infos
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          merchantId:
+            type: integer
+          merchantName:
+            type: string
+          merchantFid:
+            type: string
+          blockedAffiliates:
+            type: array
+            items:
+              $ref: '#/definitions/AffiliateBlockObj'
+  AffiliateBlockObj:
+    description: A block used to block affiliate sell merchant products
+    type: object
+    properties:
+      blockId:
+        type: integer
+      affiliateId:
+        type: integer
+      affiliateFid:
+        type: string
+      affiliateName:
+        type: string
+  MerchantDetailsResponse:
+    description: Merchant info including block infos
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          merchantId:
+            type: integer
+          merchantName:
+            type: string
+          merchantFid:
+            type: string
+  OfferResponseObj:
+    description: Response object when call get offer
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/OfferDetails'
+  OfferDetails:
+    description: Details of a Offer
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Offer Id
+      productId:
+        type: integer
+        description: Product Id
+      sku:
+        type: string
+        description: Offer sku
+      name:
+        type: string
+        description: Offer name
+      desc:
+        type: string
+        description: Offer description
+      affiliatePayout:
+        $ref: '#/definitions/AffiliatePayoutItem'
+      created:
+        type: string
+        description: Offer create time
+      type:
+        type: string
+        description: Offer type
+      publishing:
+        type: string
+        description: If Offer is published
+      processingFeeFixed:
+        type: number
+        description: Fixed processing fee
+      processingFeePercent:
+        type: number
+        description: Processing fee percentage
+      isRecurring:
+        type: boolean
+        description: If offer is recurring
+      isTrial:
+        type: boolean
+        description: If offer is trial
+      isAffiliatePayoutOverrideExempt:
+        type: boolean
+        description: If there is a payout override
+      offerPrices:
+        $ref: '#/definitions/OfferPrices'
+      recurringOffer:
+        $ref: '#/definitions/RecurringOffer'
+      trialOffer:
+        $ref: '#/definitions/TrialOffer'
+  RecurringOffer:
+    description: Recurring Offer
+    type: object
+    properties:
+      frequencyUnit:
+        type: string
+        description: Recurring Frequency Unit
+      frequencyValue:
+        type: number
+        description: Recurring Frequency Value
+      isFixTermOffer:
+        type: boolean
+        description: If It is Fix Term Offer
+      fixTermValue:
+        type: number
+        description: Fix Term Value
+      billingDateUnit:
+        type: string
+        description: Billing Date Unit
+      billingDateValue:
+        type: number
+        description: Billing Date Value
+      reminderSendEmail:
+        type: boolean
+        description: If Need to Send Reminder Email
+      reminderDateUnit:
+        type: string
+        description: Reminder Date Unit
+      reminderDateValue:
+        type: number
+        description: Reminder Date Value
+      recurringOfferIntervals:
+        type: array
+        items:
+          $ref: '#/definitions/RecurringOfferInterval'
+  RecurringOfferInterval:
+    description: Recurring Offer Interval
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Recurring Offer Interval Id
+      interval:
+        type: number
+        description: Recurring Offer Interval
+      offerId:
+        type: number
+        description: Offer Id Linked to Interval
+      affiliatePayout:
+        $ref: '#/definitions/AffiliatePayoutItem'
+      recurringOfferIntervalPrices:
+        $ref: '#/definitions/OfferPrices'
+  TrialOffer:
+    description: Recurring Offer
+    type: object
+    properties:
+      trialDateUnit:
+        type: string
+        description: Trial Date Unit
+      trialDateValue:
+        type: number
+        description: Trial Date Value
+      trialExpiryNotificationTime:
+        type: integer
+        description: Trial Expiry Notification Time
+      affiliatePayout:
+        $ref: '#/definitions/AffiliatePayoutItem'
+      trialOfferPrices:
+        $ref: '#/definitions/OfferPrices'
+  AffiliatePayoutItem:
+    description: A affiliate payout
+    type: object
+    properties:
+      payoutType:
+        type: string
+        description: Payout type
+      amount:
+        type: number
+        description: Payout amount
+  OfferPriceItem:
+    description: A basic offer price
+    type: object
+    properties:
+      currencyCode:
+        type: string
+        description: Currency code of this price
+      amount:
+        type: number
+        description: Offer price amount
+  CountryOfferPriceItem:
+    description: A country offer price
+    type: object
+    properties:
+      countryCode:
+        type: string
+        description: Country code of this price
+      defaultPrice:
+        $ref: '#/definitions/OfferPriceItem'
+      fallBackPrice:
+        $ref: '#/definitions/OfferPriceItem'
+  OfferPrices:
+    description: Offer prices of a offer which also includes country prices
+    type: object
+    properties:
+      prices:
+        type: array
+        items:
+          $ref: '#/definitions/OfferPriceItem'
+      countryPrices:
+        type: array
+        items:
+          $ref: '#/definitions/CountryOfferPriceItem'
+  Transaction:
+    description: Transaction
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Transaction Id
+      type:
+        type: string
+        description: Transaction Type
+      date:
+        type: string
+        format: date-time
+      reference:
+        type: string
+      fullReference:
+        type: string
+      merchantName:
+        type: string
+      currency:
+        type: string
+      supportEmail:
+        type: string
+      totalPrice:
+        type: number
+      subTotalPrice:
+        type: number
+      totalPriceTax:
+        type: number
+      totalUSDPrice:
+        type: number
+      totalUSDPriceTax:
+        type: number
+      gateway:
+        type: string
+      gatewayReference:
+        type: string
+      extraParameters:
+        type: string
+      transactionItems:
+        type: array
+        items:
+          $ref: '#/definitions/TransactionItem'
+      order:
+        type: integer
+      parentTransactionId:
+        type: integer
+      shippingAddress:
+        $ref: '#/definitions/CustomerAddress'
+      billInfo:
+        $ref: '#/definitions/BillInfo'
+  CustomerOrder:
+    description: CustomerOrder
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Order Id
+      created:
+        type: string
+        format: date-time
+      reference:
+        type: string
+  BillInfo:
+    description: Billing Information
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Billing Information
+      gatewayProcessor:
+        type: string
+      currencyCode:
+        type: string
+      cardNumber:
+        type: string
+      cardType:
+        type: string
+      expiry:
+        type: string
+      payerId:
+        type: string
+      gatewayReference:
+        type: string
+      billingAddressName:
+        type: string
+      billingAddressAddress:
+        type: string
+      billingAddressAddress2:
+        type: string
+      billingAddressCity:
+        type: string
+      billingAddressPostalCode:
+        type: string
+      billingAddressCountryCode:
+        type: string
+      billingAddressRegionCode:
+        type: string
+  TransactionItem:
+    description: Transaction Item
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Transaction Item Id
+      sku:
+        type: string
+      productName:
+        type: string
+      quantity:
+        type: integer
+      price:
+        type: number
+      priceTax:
+        type: number
+      usdPrice:
+        type: number
+      usdPriceTax:
+        type: number
+      image:
+        type: string
+  OrderLookUpRes:
+    description: Order look up response
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+  OrderDetails:
+    description: Order details of this order
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          reference:
+            type: string
+          created:
+            type: string
+          transactions:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+  ListOrders:
+    description: A list of orders
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          orders:
+            type: array
+            items:
+              $ref: '#/definitions/CustomerOrder'
+  PathsDeleteObj:
+    description: Response object for delete action
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          message:
+            type: string
+  NodeDeleteObj:
+    description: Response object for delete action
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          message:
+            type: string
+  PathObj:
+    description: Info of a path
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/PathInfo'
+  PathNodeObj:
+    description: Response which return a info of a path node
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/NodeInfo'
+  PathInfo:
+    description: Info of a path detailed
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      accountId:
+        type: integer
+      status:
+        type: string
+  NodeInfo:
+    description: Info of a node
+    type: object
+    properties:
+      id:
+        type: integer
+      pathId:
+        type: integer
+      offerId:
+        type: integer
+      upgradeNodeId:
+        type: integer
+      downgradeNodeId:
+        type: integer
+      upLimit:
+        type: integer
+      downLimit:
+        type: integer
+      offerName:
+        type: string
+      offerSku:
+        type: string
+  AllPathInfos:
+    description: reponse for api call to get an array of paths
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PathInfo'
+  AllPathNodes:
+    description: reponse for api call to get an array of nodes
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/NodeInfo'
+  ProductResponseObj:
+    description: Response object when call get product
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/ProductDetails'
+  ProductDetails:
+    description: Details if a product
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Product Id
+      merchantId:
+        type: integer
+        description: Product owner merchant group account id
+      sku:
+        type: string
+        description: Product sku
+      name:
+        type: string
+        description: Product name
+      desc:
+        type: string
+        description: Product description
+      disabled:
+        type: boolean
+        description: If product is disabled
+      created:
+        type: string
+        description: Product create time
+      publishing:
+        type: string
+        description: 'If product is hidden, pending or active'
+      isRaSupportProduct:
+        type: boolean
+        description: If product is ra support product
+      raSupportPhone:
+        type: string
+        description: Ra support phone
+      raSalesPhone:
+        type: string
+        description: Ra sales phone
+      softDesc:
+        type: string
+        description: Product soft description
+      customerSupportName:
+        type: string
+        description: Customer support name
+      customerSupportEmail:
+        type: string
+        description: Customer support email
+      customerSupportUrl:
+        type: string
+        description: Customer support url
+      customerSupportUrlName:
+        type: string
+        description: Customer support url name
+      lmsEnabled:
+        type: boolean
+        description: If lms enabled
+      receiptEnabled:
+        type: boolean
+        description: If receipt is enabled
+      receiptType:
+        type: string
+        description: Recipt type
+      lowKeyThreshold:
+        type: integer
+        description: Low license key threshod
+      lowKeyEmail:
+        type: string
+        description: Low license key email
+      daysRemainKeyThreshold:
+        type: integer
+        description: Days remain key threshold
+      taxExempt:
+        type: boolean
+        description: If this propduct may exempt tax
+      taxExemptionType:
+        type: string
+        description: Direction of tax exempt
+      proration:
+        type: boolean
+        description: If this product is proration product
+      outOfStockEmailTime:
+        type: string
+        description: Out of stock email sent time
+      serverPostBack:
+        type: boolean
+        description: If session id added to linker
+      isCpaShell:
+        type: boolean
+        description: If it is cpa shell
+      allowAnnual:
+        type: boolean
+        description: If this product allow annual recurring
+      extraData:
+        type: string
+        description: extra data
+      shippable:
+        type: boolean
+        description: If it is shippable
+      subscriptionProduct:
+        type: boolean
+        description: If this product is subscription product
+      productType:
+        $ref: '#/definitions/ProductType'
+      productCategory:
+        $ref: '#/definitions/ProductCategory'
+  ProductCategory:
+    description: Details if a product Category
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Product Category Id
+      fid:
+        type: string
+        description: Product Category Fid
+      name:
+        type: string
+        description: Product Category Name
+      desc:
+        type: string
+        description: Product Category Description
+      created:
+        type: string
+        description: Create Time
+      defaultRedirect:
+        type: string
+        description: Product Category Default Redirect
+  ProductType:
+    description: Details if a product Type
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Product Type Id
+      name:
+        type: string
+        description: Product Type Name
+      desc:
+        type: string
+        description: Product Type Description
+      disabled:
+        type: boolean
+        description: If Product Type Disabled
+      created:
+        type: string
+        description: Create Time
+  RebillMigrationResponse:
+    description: Rebill migration response
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+  RefundMigrationResponse:
+    description: Refund migration response
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+  CancelProfileResponse:
+    description: Response for user cancel profile api call
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+  SubscriptionInfoResponse:
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        description: Subscription Info including offer and recurring item info
+        properties:
+          id:
+            type: number
+          initialSaleDate:
+            type: string
+            format: date-time
+          nextBillingDate:
+            type: string
+            format: date-time
+          finalBillingDate:
+            type: string
+            format: date-time
+          interval:
+            type: number
+          rebillFrequencyType:
+            type: string
+          rebillFrequencyValue:
+            type: number
+          deactivateDate:
+            type: string
+            format: date-time
+          deactivateType:
+            type: string
+          status:
+            type: string
+          offer:
+            type: object
+            description: Offer Info
+            properties:
+              id:
+                type: number
+              sku:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              created:
+                type: string
+              type:
+                type: string
+              isRecurring:
+                type: boolean
+              isTrial:
+                type: boolean
+              payout:
+                type: integer
+  NewTemplates:
+    description: Sync new templates
+    type: array
+    items:
+      $ref: '#/definitions/NewTemplate'
+  NewTemplate:
+    description: New template
+    type: object
+    required:
+      - name
+      - fid
+      - scope
+    properties:
+      name:
+        description: Template name
+        type: string
+      fid:
+        description: Template fid
+        type: string
+      description:
+        description: Template description
+        type: string
+      thumbnail:
+        description: Template thumbnail image url
+        type: string
+      version:
+        description: Current version of the template.
+        type: string
+      scope:
+        description: 'Scope of the template, either for all merchants or for specific merchant'
+        type: string
+        enum:
+          - PUBLIC
+          - LIMITED
+      accounts:
+        type: array
+        items:
+          $ref: '#/definitions/AccountTemplate'
+      mediaBlocks:
+        type: array
+        items:
+          $ref: '#/definitions/TemplateMediaBlock'
+  AccountTemplate:
+    description: Account Template
+    type: object
+    required:
+      - fid
+      - status
+    properties:
+      fid:
+        type: string
+        description: Merchant's fid
+      status:
+        type: string
+        enum:
+          - PENDING
+          - ACTIVE
+          - HIDE
+  Templates:
+    description: Templates
+    type: object
+    required:
+      - response
+      - data
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/TemplateDataObject'
+  TemplateDataObject:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      fid:
+        type: string
+      description:
+        type: string
+      thumbnail:
+        type: string
+      scope:
+        type: string
+      accounts:
+        type: array
+        items:
+          $ref: '#/definitions/AccountTemplate'
+      mediaBlocks:
+        type: array
+        items:
+          $ref: '#/definitions/TemplateMediaBlock'
+  TemplateMediaBlock:
+    type: object
+    properties:
+      key:
+        type: string
+      showToolbar:
+        type: boolean
+      defaultValue:
+        type: string
+  Deployment:
+    description: Templates Deployment Status
+    type: object
+    required:
+      - response
+      - data
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: string
+        enum:
+          - OK
+          - FAILED
+  Token:
+    description: Token Object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          token:
+            type: string
+            format: password
+  Tracking:
+    description: Tracking string
+    type: object
+    required:
+      - id
+      - type
+      - name
+      - isGlobal
+      - data
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      name:
+        type: string
+      isGlobal:
+        type: boolean
+      data:
+        type: object
+        description: custom object containing data specific to tracking type
+  PostbackTest:
+    description: Tracking object
+    type: object
+    required:
+      - link
+      - action
+      - aliasFid
+      - destinationName
+      - responseCode
+      - success
+      - time
+    properties:
+      link:
+        type: string
+      action:
+        type: string
+      aliasFid:
+        type: string
+      destinationName:
+        type: string
+      responseCode:
+        type: integer
+      success:
+        type: boolean
+      time:
+        type: string
+        description: 'format: 2000-01-31T18:30:45+00:00'
+  TransactionResponseObj:
+    description: Info of a path
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        $ref: '#/definitions/TransactionDetails'
+  TransactionDetails:
+    description: Details if a transaction
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Transaction Id
+      type:
+        type: string
+        description: Transaction Type
+      date:
+        type: string
+        format: date-time
+      reference:
+        type: string
+      fullReference:
+        type: string
+      merchantName:
+        type: string
+      currency:
+        type: string
+      supportEmail:
+        type: string
+      totalPrice:
+        type: number
+      subTotalPrice:
+        type: number
+      totalPriceTax:
+        type: number
+      totalUSDPrice:
+        type: number
+      totalUSDPriceTax:
+        type: number
+      gateway:
+        type: string
+      gatewayReference:
+        type: string
+      extraParameters:
+        type: string
+      parentTransactionId:
+        type: integer
+      transactionItems:
+        type: array
+        items:
+          $ref: '#/definitions/TransactionItem'
+      order:
+        $ref: '#/definitions/OrderDetailedObj'
+      shippingAddress:
+        $ref: '#/definitions/CustomerAddressObj'
+      billInfo:
+        $ref: '#/definitions/BillInfo'
+      customer:
+        $ref: '#/definitions/CustomerDetailedObj'
+  OrderDetailedObj:
+    description: Details of an order
+    type: object
+    properties:
+      id:
+        type: integer
+      orderReference:
+        type: string
+      created:
+        type: string
+      hostId:
+        type: integer
+      customerGroupAccountId:
+        type: integer
+      merchantGroupAccountId:
+        type: integer
+      affiliateGroupAccountId:
+        type: integer
+      currencyCode:
+        type: string
+      language:
+        type: string
+      countryCode:
+        type: string
+      regionCode:
+        type: string
+  CustomerDetailedObj:
+    description: Customer object
+    type: object
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      timezone:
+        type: string
+  UpdateEmailResponse:
+    description: response to a successfull email update request
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          token:
+            type: string
+  Identity:
+    description: Identify of an user
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          customerId:
+            type: integer
+          accountId:
+            type: integer
+          username:
+            type: string
+          isMerchant:
+            type: boolean
+          isStaff:
+            type: boolean
+          isAffiliate:
+            type: boolean
+          isCustomer:
+            type: boolean
+          email:
+            type: string
+  User:
+    description: User object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          username:
+            type: string
+          email:
+            type: string
+          firstName:
+            type: string
+          lastName:
+            type: string
+          timezone:
+            type: string
+          accountId:
+            type: integer
+          defaultDashboard:
+            type: string
+          defaultProductView:
+            type: string
+          passwordExpiryDates:
+            type: integer
+          lastLoginDate:
+            type: string
+          lastLoginIp:
+            type: string
+          language:
+            type: string
+  UserForgetPassword:
+    description: Response for user forgetting password api call
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+paths:
+  /affiliatelinks:
+    get:
+      tags:
+        - Affiliate linker Links
+      description: Get affiliate linker links
+      operationId: affiliateLinksGet
+      parameters:
+        - name: catalogFid
+          in: query
+          description: Offer's catalog FID
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Array containing affiliate linker links
+                type: array
+                items:
+                  $ref: '#/definitions/AffiliateLink'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /affiliatemerchantterms:
+    post:
+      tags:
+        - Affiliate Merchant Terms
+      description: Accept merchant terms as an affiliate
+      operationId: affiliateMerchantTermsAdd
+      parameters:
+        - name: merchantTermId
+          in: query
+          description: Merchant Term ID
+          type: integer
+          required: true
+        - name: affiliateAccountId
+          in: query
+          description: Affiliate Group Account ID (internal use only)
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/affiliates/{id}':
+    get:
+      tags:
+        - Affiliates
+      description: Get an affiliate's company account information
+      operationId: getAffiliateById
+      parameters:
+        - in: path
+          name: id
+          description: Affiliate Id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                $ref: '#/definitions/AffiliateAccount'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Affiliates
+      description: Save an affiliate's company account information
+      operationId: saveAffiliateById
+      parameters:
+        - in: path
+          name: id
+          description: Affiliate ID
+          type: integer
+          required: true
+        - in: query
+          name: companyName
+          description: Name of affiliate's company
+          type: string
+          required: true
+        - in: query
+          name: website
+          description: Affiliate's company website
+          type: string
+          required: true
+        - in: query
+          name: phone
+          description: Affiliate's company phone number
+          type: string
+          required: true
+        - in: query
+          name: contactName
+          description: Affiliate's company contact name to receive system notifications from RevenueWire
+          type: string
+          required: true
+        - in: query
+          name: technicalEmail
+          description: Affiliate's company email address to receive system notifications from RevenueWire
+          type: string
+          required: true
+        - in: query
+          name: address
+          description: Affiliate's company address
+          type: string
+          required: true
+        - in: query
+          name: city
+          description: Affiliate's company city
+          type: string
+          required: true
+        - in: query
+          name: stateProvince
+          description: Affiliate's company country region (if applicable for that country)
+          type: string
+        - in: query
+          name: zipPostalCode
+          description: Affiliate's company postal code
+          type: string
+          required: true
+        - in: query
+          name: gstNumber
+          description: Affiliate's Canadian gst tax number (if applicable)
+          type: string
+        - in: query
+          name: taxRegion
+          description: Affiliate's Canadian province that tax number is registered in (if applicable)
+          type: string
+        - in: query
+          name: paymentThreshold
+          description: Minimum amount that Affiliate wants to receive per payment
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                $ref: '#/definitions/AffiliateAccount'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /aliases:
+    get:
+      tags:
+        - Aliases
+      description: Get list of `Alias` objects.
+      operationId: aliasesGet
+      parameters:
+        - name: groupAccountId
+          in: query
+          description: Group Account ID (admin only)
+          type: integer
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Aliases'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /banners:
+    get:
+      tags:
+        - Banners
+      description: Get list of `Banner` objects.
+      operationId: bannersGet
+      parameters:
+        - name: type
+          in: query
+          description: type of banner
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Array containing banners
+                type: array
+                items:
+                  $ref: '#/definitions/Banner'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/banners/{id}/dismiss':
+    put:
+      tags:
+        - Banners
+      description: Dismiss a specific banner
+      operationId: bannerDismiss
+      parameters:
+        - name: id
+          in: path
+          description: Banner id
+          type: integer
+          required: true
+        - name: type
+          in: query
+          description: type of banner
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Id of banner dismissed
+                type: string
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /banners/dismissedTypes:
+    put:
+      tags:
+        - Banners
+      description: Dismiss a specific banner type
+      operationId: bannerDismissTypePut
+      parameters:
+        - name: type
+          in: query
+          description: Banner type being dismissed
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/BannerType'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - Banners
+      description: Restore a specific banner type so that it will display again
+      operationId: bannerDismissTypeDelete
+      parameters:
+        - name: type
+          in: query
+          description: Banner type being restored
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/BannerType'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/billings/{billingInfoId}':
+    put:
+      tags:
+        - Billings
+      description: Update customer billing info for a recurring profile using redit card
+      operationId: billingInfoUpdate
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: billingInfoId
+          in: path
+          description: bill info id for the recurring transaction item
+          type: integer
+          required: true
+        - name: cardHolderFullName
+          in: formData
+          description: Card holder full name
+          type: string
+          required: true
+        - name: cardNumber
+          in: formData
+          description: Credit Card number
+          type: string
+          required: true
+        - name: cardExpiry
+          in: formData
+          description: Credit Card expiry
+          type: string
+          required: true
+        - name: cardCCV
+          in: formData
+          description: Credit CCV
+          type: string
+          required: false
+        - name: recurringTransactionItemId
+          in: formData
+          description: recurring transaction item to be updated
+          type: string
+          required: false
+        - name: postalCode
+          in: formData
+          description: Postal code
+          type: string
+          required: false
+        - name: address
+          in: formData
+          description: Billing address one
+          type: string
+          required: false
+        - name: address2
+          in: formData
+          description: Billing address two
+          type: string
+          required: false
+        - name: city
+          in: formData
+          description: Billing city
+          type: string
+          required: false
+        - name: country
+          in: formData
+          description: Billing country
+          type: string
+          required: false
+        - name: state
+          in: formData
+          description: Billing state or province
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/BillInfoResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /billings/update-card:
+    put:
+      tags:
+        - Billings
+      description: Update customer billing info and apply changes to all related profiles
+      operationId: billingInfoAllUpdate
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: customerEmail
+          in: formData
+          description: Customer email
+          type: string
+          required: true
+        - name: oldFirstSix
+          in: formData
+          description: The first six digits for the old card
+          type: string
+          required: true
+        - name: oldLastFour
+          in: formData
+          description: The last four digits for the old card
+          type: string
+          required: true
+        - name: oldCardExpiry
+          in: formData
+          description: Credit Card expiry for the old card
+          type: string
+          required: true
+        - name: cardHolderFullName
+          in: formData
+          description: Card holder full name
+          type: string
+          required: true
+        - name: cardNumber
+          in: formData
+          description: Credit Card number
+          type: string
+          required: true
+        - name: cardExpiry
+          in: formData
+          description: Credit Card expiry
+          type: string
+          required: true
+        - name: cardCCV
+          in: formData
+          description: Credit CCV
+          type: string
+          required: false
+        - name: postalCode
+          in: formData
+          description: Postal code
+          type: string
+          required: false
+        - name: address
+          in: formData
+          description: Billing address one
+          type: string
+          required: false
+        - name: address2
+          in: formData
+          description: Billing address two
+          type: string
+          required: false
+        - name: city
+          in: formData
+          description: Billing city
+          type: string
+          required: false
+        - name: country
+          in: formData
+          description: Billing country
+          type: string
+          required: false
+        - name: state
+          in: formData
+          description: Billing state or province
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CardUpdateResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /billings/update-paypal:
+    put:
+      tags:
+        - Billings
+      description: Update profile using paypal express
+      operationId: billingInfoUpdatePaypal
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: ppToken
+          in: formData
+          description: sale info token generated by our side
+          type: string
+        - name: token
+          in: formData
+          description: token generated by paypal
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/BillInfoResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/billings/{billingInfoId}/setup-paypal-url':
+    post:
+      tags:
+        - Billings
+      description: Generate a paypal express url for updating billing info
+      operationId: setUpPaypalUrl
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: billingInfoId
+          in: path
+          description: billing info id
+          type: integer
+          required: true
+        - name: returnUrl
+          in: formData
+          description: return url if everything goes well in paypal website
+          type: string
+          required: true
+        - name: cancelUrl
+          in: formData
+          description: cancel url if customer click cancel button in paypal website
+          type: string
+          required: true
+        - name: recurringTransactionItemId
+          in: formData
+          description: recurring transaction item to be updated
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PaypalUrl'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /catalog:
+    get:
+      tags:
+        - Catalog
+      description: Gets `Offer` objects
+      operationId: catalogOffersGet
+      parameters:
+        - name: keyword
+          in: query
+          description: Search criteria keyword
+          type: string
+          required: false
+        - name: offerTypes
+          in: query
+          description: |
+            Filter results by offer types. Can include RevShare or any CPA offer type. \
+
+            JSON-formatted array (case insensitive). eg:
+            `["RevShare", "Install"]` (case insensitive)
+          type: string
+          required: false
+        - name: productCategories
+          in: query
+          description: |
+            Filter results by product category fids.
+
+            JSON-formatted array (case insensitive). eg:
+            `["live_support", "antivirus"]`
+          type: string
+          default: ''
+          required: false
+        - name: languages
+          in: query
+          description: |
+            Filter results on (RevShare) language codes. Doesn't affect CPA results.
+
+            JSON-formatted array (case insensitive). eg:
+            `["EN", "FR"]`
+          type: string
+          required: false
+        - name: geos
+          in: query
+          description: |
+            Filter results on (CPA) geo codes. Doesn't affect RevShare results.
+
+            JSON-formatted array (case insensitive). eg:
+            `["US", "CA"]`
+          type: string
+          required: false
+        - name: promoMethods
+          in: query
+          description: |
+            Filter results on promotional methods.
+
+            JSON-formatted array (case insensitive). eg:
+            `["Email", "SEO", 'Paid Search']`
+          type: string
+          required: false
+        - name: payoutMin
+          in: query
+          description: Minimum fixed payout. Doesn't affect %-based payout results.
+          type: integer
+          required: false
+        - name: payoutMax
+          in: query
+          description: Maximum fixed payout. Doesn't affect %-based payout results.
+          type: integer
+          required: false
+        - name: percentMin
+          in: query
+          description: Minimum percentage payout. Doesn't affect fixed payout results.
+          type: integer
+          required: false
+        - name: percentMax
+          in: query
+          description: Maximum percentage payout. Doesn't affect fixed payout results.
+          type: integer
+          required: false
+        - name: couponsOnly
+          in: query
+          description: 'Show only products with coupons. RevShare only, CPA offers will be filtered out..'
+          type: boolean
+          required: false
+        - name: privateOnly
+          in: query
+          description: Show only private network products.
+          type: boolean
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/CatalogOffer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/catalog/{id}':
+    get:
+      tags:
+        - Catalog
+      description: Gets `Offer` objects
+      operationId: catalogOfferGet
+      parameters:
+        - name: id
+          in: path
+          description: Catalog offer ID
+          type: integer
+          required: true
+        - name: affiliateAccountId
+          in: query
+          description: Affiliate Group Account ID (internal use only)
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                $ref: '#/definitions/CatalogOfferDetail'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /catalog/top-offers:
+    get:
+      tags:
+        - Catalog
+      description: Gets featured top offers list
+      operationId: topOffersGet
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/CatalogOffer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Catalog
+      description: Saves featured top offers list
+      operationId: topOffersPut
+      parameters:
+        - name: offers
+          in: query
+          description: |
+            Top offer catalog IDs (can save up to 7)
+
+            JSON-formatted array of IDs. eg:
+            `[9, 84]`
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /catalog/new-offers:
+    get:
+      tags:
+        - Catalog
+      description: Gets featured new offers list
+      operationId: newOffersGet
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/CatalogOffer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Catalog
+      description: Saves featured new offers list
+      operationId: newOffersPut
+      parameters:
+        - name: offers
+          in: query
+          description: |
+            Top offer catalog IDs (can save up to 7)
+
+            JSON-formatted array of IDs. eg:
+            `[9, 84]`
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /coupons:
+    get:
+      tags:
+        - Coupons
+      description: Get list of `Coupon` objects.
+      operationId: couponsGet
+      parameters:
+        - name: catalogId
+          in: query
+          description: Offer's catalog id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Array containing coupons
+                type: array
+                items:
+                  $ref: '#/definitions/Coupon'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /cpaapplytorun:
+    post:
+      tags:
+        - CPA Apply To Run
+      description: Apply to run a CPA offer as an affiliate
+      operationId: cpaApplyToRunAdd
+      parameters:
+        - name: offerId
+          in: query
+          description: Catalog Offer ID
+          type: integer
+          required: true
+        - name: geos
+          in: query
+          description: geo codes (JSON-formatted array)
+          type: string
+          required: false
+        - name: promoMethods
+          in: query
+          description: promotion methods (JSON-formatted array)
+          type: string
+          required: false
+        - name: additionalDetails
+          in: query
+          description: additional comments to include with application
+          type: string
+          required: false
+        - name: customCreatives
+          in: query
+          description: use custom creatives in campaign
+          type: boolean
+          required: false
+        - name: affiliateAccountId
+          in: query
+          description: Affiliate Group Account ID (internal use only)
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/cpaapplytorun/{payoutPolicyId}/accept':
+    put:
+      tags:
+        - CPA Accept Terms
+      description: Accept CPA Payout Policy terms and conditions as an affiliate
+      operationId: cpaTermsAccept
+      parameters:
+        - name: payoutPolicyId
+          in: path
+          description: CPA Payout Policy ID
+          type: integer
+          required: true
+        - name: affiliateAccountId
+          in: query
+          description: Affiliate Group Account ID (internal use only)
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers:
+    get:
+      tags:
+        - Customers
+      description: Get list of Customers for a merchant
+      operationId: getCustomersForMerchant
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CustomersRespone'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/customers/{customerId}':
+    get:
+      tags:
+        - Customers
+      description: Get a customer object
+      operationId: getCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Customer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/customers/{customerUserId}/transactions':
+    get:
+      tags:
+        - Customers
+      description: Get a list of Transactions purchased by the customer
+      operationId: getTransactions
+      parameters:
+        - name: customerUserId
+          in: path
+          description: Customer user id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CustomerTransactions'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/customers/{customerUserId}/offers':
+    get:
+      tags:
+        - Customers
+      description: Get a list of Offers purchased by the customer
+      operationId: getOffers
+      parameters:
+        - name: customerUserId
+          in: path
+          description: Customer user id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CustomerOffers'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/customers/{customerId}/address/{transactionId}':
+    put:
+      tags:
+        - Customers
+      description: Update customer group account oder shipping address
+      operationId: updateShippingAddress
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer id
+          type: integer
+          required: true
+        - name: transactionId
+          in: path
+          description: transaction id
+          type: integer
+          required: true
+        - name: name
+          in: formData
+          description: Customer's name
+          type: string
+          required: true
+        - name: address
+          in: formData
+          description: Customer's address
+          type: string
+          required: true
+        - name: countryCode
+          in: formData
+          description: Country code
+          type: string
+          required: true
+        - name: regionCode
+          in: formData
+          description: State code
+          type: string
+          required: false
+        - name: city
+          in: formData
+          description: City
+          type: string
+          required: true
+        - name: postalCode
+          in: formData
+          description: Postal code
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CustomerAddress'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /dashboard/customization:
+    post:
+      tags:
+        - Dashboard
+      description: Get dashboard customization settings.
+      operationId: dashboardCustomizationPost
+      parameters:
+        - name: items
+          in: body
+          description: Dashboard customization setting item list
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Setting'
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /destinations:
+    get:
+      tags:
+        - Destinations
+      description: Get list of `Destination` objects.
+      operationId: destinationsGet
+      parameters:
+        - name: catalogFid
+          in: query
+          description: Offer's catalog fid
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Array containing destination links
+                type: array
+                items:
+                  $ref: '#/definitions/Destination'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - Destinations
+      description: Add a new destination link
+      operationId: destinationsAdd
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: catalogFid
+          in: formData
+          description: Offer's catalog fid
+          type: string
+          required: true
+        - name: name
+          in: formData
+          description: Destination link name
+          type: string
+          required: true
+        - name: url
+          in: formData
+          description: Destination link URL
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Newly created destination link
+                $ref: '#/definitions/Destination'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/destinations/{id}':
+    put:
+      tags:
+        - Destinations
+      description: Update a destination link
+      operationId: destinationsUpdate
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          description: Destination id
+          type: integer
+          required: true
+        - name: name
+          in: formData
+          description: Destination link name
+          type: string
+          required: true
+        - name: url
+          in: formData
+          description: 'Destination link URL. Must begin with http:// or https://'
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Newly updated destination link
+                $ref: '#/definitions/Destination'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - Destinations
+      description: Delete a destination link
+      operationId: destinationsDelete
+      parameters:
+        - name: id
+          in: path
+          description: Destination id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /domains:
+    get:
+      tags:
+        - Domains
+      description: Get `Domain` objects.
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - Domains
+      description: Create `Domain` objects.
+      consumes:
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: domain
+          in: formData
+          description: Domain
+          type: string
+          required: true
+        - name: type
+          in: formData
+          description: Domain type
+          type: string
+          required: true
+          enum:
+            - cart
+            - link
+        - name: cert
+          in: formData
+          description: Certificate
+          type: file
+          required: true
+        - name: key
+          in: formData
+          description: Certificate private key
+          type: file
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/domains/{id}/upload-cert':
+    post:
+      tags:
+        - Domains
+      description: Update `Domain` certificate.
+      consumes:
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - name: cert
+          in: formData
+          description: Certificate
+          type: file
+          required: true
+        - name: key
+          in: formData
+          description: Certificate private key
+          type: file
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/domains/{id}':
+    get:
+      tags:
+        - Domains
+      description: Delete `Domain`.
+      operationId: domainsGet
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - Domains
+      description: Get a `Domain`.
+      operationId: domainsDelete
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Domains
+      description: Update `Domain` status.
+      operationId: domainsUpdate
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - name: status
+          in: query
+          description: Status of the domain
+          type: string
+          enum:
+            - active
+            - pending
+          required: false
+        - name: hop
+          in: query
+          description: 'Whether to turn of hop for linker, by default, it should be on unless you know what you are doing.'
+          type: string
+          default: 'on'
+          required: false
+          enum:
+            - 'on'
+            - 'off'
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /domains/email:
+    post:
+      tags:
+        - Domains
+      description: Create a `Email` for the domain.
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: body
+          name: labels
+          description: Json Formatted body
+          required: true
+          schema:
+            $ref: '#/definitions/newDomain'
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/domains/email/{id}':
+    delete:
+      tags:
+        - Domains
+      description: Delete a `Email` for the domain.
+      parameters:
+        - name: id
+          in: path
+          description: Email address
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /geo-info/supported-languages:
+    get:
+      tags:
+        - GEO
+      description: Get supported languages in the platform
+      operationId: geoGetSupportedLanguages
+      responses:
+        '200':
+          description: Successful Responses
+          schema:
+            $ref: '#/definitions/SupportedLanguages'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /geo-info/countries:
+    get:
+      tags:
+        - GEO
+      description: Get country options available in the platform .
+      operationId: geoGetCountryList
+      responses:
+        '200':
+          description: Successful Responses
+          schema:
+            $ref: '#/definitions/CountryList'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/merchantgatewayconfigs/{clientId}/versions/{versionId}/activate/':
+    post:
+      tags:
+        - MerchantGatewayConfigs
+      summary: Activate the gateway policy for a merchant
+      description: Activate the gateway policy for a merchant
+      operationId: activate
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: clientId
+          in: path
+          description: client Id
+          type: string
+          required: true
+        - name: versionId
+          in: path
+          description: version Id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/ActivateGatewayResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/merchants/{merchantId}/block-affiliate/':
+    post:
+      tags:
+        - Merchants
+      summary: Create merchant affiliate block
+      description: Create a block which merchant does not allow affiliate sale products
+      operationId: createAffiliateBlock
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: merchantId
+          in: path
+          description: Merchant group account id
+          type: integer
+          required: true
+        - name: affiliateId
+          in: formData
+          description: Affiliate group account id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Merchant'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/merchants/{merchantId}':
+    get:
+      tags:
+        - Merchants
+      summary: Get merchant info
+      description: Get merchant info
+      operationId: getMerchant
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: merchantId
+          in: path
+          description: Merchant group account id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/MerchantDetailsResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/merchants/{merchantId}/block-affiliate/{blockId}/':
+    delete:
+      tags:
+        - Merchants
+      summary: Delete Merchant Affiliate Block
+      description: Delete merchant affiliate block to make affiliate to sell merchant product again
+      operationId: deleteAffiliateBlock
+      parameters:
+        - name: merchantId
+          in: path
+          description: Merchant id
+          type: integer
+          required: true
+        - name: blockId
+          in: path
+          description: Block id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Merchant'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/offers/{offerId}/':
+    get:
+      tags:
+        - Offers
+      summary: Get Offer
+      description: Get detailed info for a offer
+      operationId: getOffer
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: offerId
+          in: path
+          description: offer id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/OfferResponseObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/orders/{orderId}':
+    get:
+      tags:
+        - Orders
+      description: Get this order info and transactions of this order
+      operationId: getOrderDetail
+      parameters:
+        - name: orderId
+          in: path
+          description: Order id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/OrderDetails'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /orders/purchase-lookup:
+    post:
+      tags:
+        - Orders
+      description: Look up order info by email and send it
+      operationId: orderLookUp
+      parameters:
+        - name: email
+          in: formData
+          description: customer email
+          type: string
+          required: true
+        - name: merchantFid
+          in: formData
+          description: merchant fid
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/OrderLookUpRes'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/orders/customer-email/{email}':
+    get:
+      tags:
+        - Orders
+      description: Get a list of orders
+      operationId: getOrderList
+      parameters:
+        - name: email
+          in: path
+          description: Customer email
+          type: string
+          required: true
+        - name: merchantFid
+          in: query
+          description: Merchant fid
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/ListOrders'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /paths:
+    post:
+      tags:
+        - Paths
+      summary: Create path
+      description: Create a path
+      operationId: createPath
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: name
+          in: formData
+          description: Path name
+          type: string
+          required: true
+        - name: accountId
+          in: formData
+          description: Merchant account id
+          type: integer
+          required: true
+        - name: status
+          in: formData
+          description: Path status
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      tags:
+        - Paths
+      summary: Get Paths
+      description: Get all paths in the system which meet search criteria
+      operationId: getAllPaths
+      parameters:
+        - name: name
+          in: query
+          description: Path Name
+          type: string
+          required: false
+        - name: status
+          in: query
+          description: Path Status
+          type: string
+          required: false
+      consumes:
+        - application/x-www-form-urlencoded
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/AllPathInfos'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/paths/{pathId}/':
+    delete:
+      tags:
+        - Paths
+      summary: Delete path
+      description: Delete a path
+      operationId: deletePath
+      parameters:
+        - name: pathId
+          in: path
+          description: Path id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathsDeleteObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      tags:
+        - Paths
+      summary: Get Path
+      description: Get detailed info for a path
+      operationId: getPathInfo
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: pathId
+          in: path
+          description: Path id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Paths
+      summary: Update path
+      description: Update path
+      operationId: updatePath
+      parameters:
+        - name: pathId
+          in: path
+          description: Path id
+          type: integer
+          required: true
+        - name: name
+          in: formData
+          description: path name
+          type: string
+          required: false
+        - name: status
+          in: formData
+          description: path status
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/paths/{pathId}/nodes/':
+    post:
+      tags:
+        - Paths
+      summary: Create path node
+      description: Create a path node
+      operationId: createNode
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: pathId
+          in: path
+          description: Path Id
+          type: integer
+          required: true
+        - name: offerId
+          in: formData
+          description: Offer Id
+          type: integer
+          required: true
+        - name: upgradeNodeId
+          in: formData
+          description: Upgrade Node Id of This Node
+          type: integer
+          required: false
+        - name: downgradeNodeId
+          in: formData
+          description: Downgrade Node Id of This Node
+          type: integer
+          required: false
+        - name: upLimit
+          in: formData
+          description: Up Limit of This Node
+          type: integer
+          required: false
+        - name: downLimit
+          in: formData
+          description: Down Limit of This Node
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathNodeObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      tags:
+        - Paths
+      summary: Get nodes in a path
+      description: Get nodes in a path
+      operationId: getNodesInPath
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: pathId
+          in: path
+          description: Path Id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/AllPathNodes'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/paths/{pathId}/nodes/{nodeId}':
+    get:
+      tags:
+        - Paths
+      summary: Get a node
+      description: Get a node by a node id
+      operationId: getNode
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: pathId
+          in: path
+          description: Path Id
+          type: integer
+          required: true
+        - name: nodeId
+          in: path
+          description: Node Id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathNodeObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Paths
+      summary: Update a node
+      description: Update a node
+      operationId: updateNode
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: pathId
+          in: path
+          description: Path Id
+          type: integer
+          required: true
+        - name: nodeId
+          in: path
+          description: Node Id
+          type: integer
+          required: true
+        - name: upgradeNodeId
+          in: formData
+          description: Upgrade Node Id of This Node
+          type: integer
+          required: false
+        - name: downgradeNodeId
+          in: formData
+          description: Downgrade Node Id of This Node
+          type: integer
+          required: false
+        - name: upLimit
+          in: formData
+          description: Up Limit of This Node
+          type: integer
+          required: false
+        - name: downLimit
+          in: formData
+          description: Down Limit of This Node
+          type: integer
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/PathNodeObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - Paths
+      summary: Delete a node
+      description: Delete a node by a node id
+      operationId: deleteNode
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: pathId
+          in: path
+          description: Path Id
+          type: integer
+          required: true
+        - name: nodeId
+          in: path
+          description: Node Id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/NodeDeleteObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/products/{productId}':
+    get:
+      tags:
+        - Products
+      summary: Get Product
+      description: Get detailed info for a product
+      operationId: getProduct
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: productId
+          in: path
+          description: product id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/ProductResponseObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/rebillmigrations/{recurringTransactionItemId}/rebill/':
+    post:
+      tags:
+        - RebillMigrationss
+      summary: Use card info from vault to enable a paused rebill task
+      description: Use card info from vault to enable a paused rebill task
+      operationId: rebill
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: recurringTransactionItemId
+          in: path
+          description: Recurring transaction item id
+          type: integer
+          required: true
+        - name: cardNumber
+          in: formData
+          description: Credit card number
+          type: string
+          required: true
+        - name: cardExpiry
+          in: formData
+          description: Card Expiry MMYY
+          type: string
+          required: true
+        - name: selectedGateway
+          in: formData
+          description: Gateway Name which should be the exact same as what sent by jackfruit
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/RebillMigrationResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/refundmigrations/{transactionId}/refund/':
+    post:
+      tags:
+        - RefundMigrationss
+      summary: Use card info from vault to give customer credit by pavision
+      description: Use card info from vault to give customer credit by pavision
+      operationId: refund
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: transactionId
+          in: path
+          description: Pending refund transaction id
+          type: integer
+          required: true
+        - name: cardNumber
+          in: formData
+          description: Credit card number
+          type: string
+          required: true
+        - name: cardExpiry
+          in: formData
+          description: Card Expiry MMYY
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/RefundMigrationResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/subscriptions/{id}':
+    get:
+      tags:
+        - Subscriptions
+      description: Get Subscription Details
+      operationId: getSubscriptionInfo
+      parameters:
+        - in: path
+          name: id
+          description: Recurring Transaction item id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/SubscriptionInfoResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/subscriptions/legacy/{id}':
+    get:
+      tags:
+        - Subscriptions
+      description: Get Subscription Details for a transaction item
+      operationId: getLegacySubscriptionInfo
+      parameters:
+        - in: path
+          name: id
+          description: Transaction item id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/SubscriptionInfoResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/subscriptions/{recurringTransactionItemId}/cancel':
+    put:
+      tags:
+        - Subscriptions
+      description: Cancal customer recurring profile
+      operationId: subscriptionCancel
+      parameters:
+        - in: path
+          name: recurringTransactionItemId
+          description: Recurring transaction item id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CancelProfileResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/subscriptions/legacy/{transactionItemId}/cancel':
+    put:
+      tags:
+        - Subscriptions
+      description: 'Depricated, legacy cancal customer recurring profile'
+      operationId: legacySubscriptionCancel
+      parameters:
+        - in: path
+          name: transactionItemId
+          description: Transaction item id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/CancelProfileResponse'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /templates/sync:
+    post:
+      tags:
+        - Templates Management
+      summary: Sync templates from cart 2.0
+      operationId: templateSync
+      parameters:
+        - name: template
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/NewTemplates'
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Templates'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /templates/deploy:
+    post:
+      summary: Deploy templates to a new version
+      tags:
+        - Templates Management
+      operationId: templatesDeploy
+      parameters:
+        - name: version
+          in: formData
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Deployment'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /templates/release:
+    post:
+      summary: Release templates
+      tags:
+        - Templates Management
+      operationId: templatesRelease
+      parameters:
+        - name: version
+          in: formData
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Deployment'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /templates:
+    get:
+      tags:
+        - Templates
+      description: Get a list of templates
+      operationId: templatesGet
+      parameters:
+        - name: accountId
+          in: query
+          description: Merchant account id
+          type: string
+          required: false
+        - name: keywords
+          in: query
+          description: Search name or fid
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Templates'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /token:
+    post:
+      operationId: tokenGenerate
+      tags:
+        - Token
+      description: |
+        Create a new `Token`.
+      parameters:
+        - name: username
+          in: header
+          description: User's username
+          type: string
+        - name: password
+          in: header
+          description: User's password
+          type: string
+      responses:
+        '200':
+          description: Successful Responses
+          schema:
+            $ref: '#/definitions/Token'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /trackings:
+    get:
+      tags:
+        - Trackings
+      description: Get list of `Tracking` objects.
+      operationId: trackingsGet
+      parameters:
+        - name: catalogId
+          in: query
+          description: Offer's catalog ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Array containing tracking objects
+                type: array
+                items:
+                  $ref: '#/definitions/Tracking'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - Trackings
+      description: Add a new tracking
+      operationId: trackingsAdd
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: catalogId
+          in: formData
+          description: Offer's catalog ID
+          type: string
+          required: true
+        - name: type
+          in: formData
+          description: Tracking type
+          type: string
+          required: true
+        - name: data
+          in: formData
+          description: Tracking specific data
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Newly created tracking
+                $ref: '#/definitions/Tracking'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/trackings/{id}':
+    put:
+      tags:
+        - Trackings
+      description: Update a tracking
+      operationId: trackingsUpdate
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          description: Tracking ID
+          type: string
+          required: true
+        - name: data
+          in: formData
+          description: Tracking specific data
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Newly updated tracking
+                $ref: '#/definitions/Tracking'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - Trackings
+      description: Delete a Tracking
+      operationId: trackingsDelete
+      parameters:
+        - name: id
+          in: path
+          description: Tracking ID
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/trackings/{id}/test':
+    post:
+      tags:
+        - Trackings
+      description: Send a test postback to a tracking (for GET type only)
+      operationId: postbackTest
+      parameters:
+        - name: id
+          in: path
+          description: Tracking ID
+          type: string
+          required: true
+        - name: destinationId
+          in: formData
+          description: Test destination ID
+          type: integer
+          required: true
+        - name: catalogId
+          in: formData
+          description: Catalog offer ID
+          type: integer
+          required: true
+        - name: clickId
+          in: formData
+          description: click ID
+          type: string
+          required: false
+        - name: subId
+          in: formData
+          description: sub ID
+          type: string
+          required: false
+        - name: subId2
+          in: formData
+          description: sub ID 2
+          type: string
+          required: false
+        - name: subId3
+          in: formData
+          description: sub ID 3
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            required:
+              - response
+              - data
+            properties:
+              response:
+                $ref: '#/definitions/Response'
+              data:
+                description: Test results
+                $ref: '#/definitions/PostbackTest'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/transactions/{transactionId}':
+    get:
+      tags:
+        - Transactions
+      summary: Get Transaction
+      description: Get detailed info for a transaction
+      operationId: getTransaction
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: transactionId
+          in: path
+          description: transaction id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/TransactionResponseObj'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /users/login:
+    post:
+      tags:
+        - Users
+      description: Login an user
+      operationId: customerLogin
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: username
+          in: formData
+          description: User name
+          type: string
+          required: true
+        - name: password
+          in: formData
+          description: User password
+          type: string
+          required: true
+        - name: accountId
+          in: formData
+          description: User Account Id
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Identity'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /users/order-login:
+    post:
+      tags:
+        - Users
+      description: Login an user by order reference
+      operationId: customerOrderLogin
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: orderReference
+          in: formData
+          description: Order reference
+          type: string
+          required: true
+        - name: lastFourCC
+          in: formData
+          description: Last four CC digets
+          type: string
+          required: true
+        - name: postCode
+          in: formData
+          description: Postcode/Zip
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Identity'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /users/verify:
+    put:
+      tags:
+        - Users
+      description: Verify an user account
+      operationId: userVerify
+      parameters:
+        - name: email
+          in: query
+          description: User email
+          type: string
+          required: true
+        - name: token
+          in: query
+          description: Token generated when creating a customer user
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /users/forget-password:
+    post:
+      tags:
+        - Users
+      description: Forgot my password
+      operationId: userForgotPassword
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: email
+          in: formData
+          description: Your email address
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/UserForgetPassword'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /users/reset-password:
+    post:
+      tags:
+        - Users
+      description: Reset my password
+      operationId: userResetPassword
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: email
+          in: formData
+          description: Your email address
+          type: string
+        - name: token
+          in: formData
+          description: Your verificaton token
+          type: string
+        - name: password
+          in: formData
+          description: Your new password
+          type: string
+          format: password
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/users/{id}/update-password':
+    put:
+      tags:
+        - Users
+      description: Change password
+      operationId: userUpdatePassword
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+        - name: oldPassword
+          in: formData
+          description: Your current password
+          format: password
+          required: true
+          type: string
+        - name: newPassword
+          in: formData
+          description: your new password
+          format: password
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/users/{id}/save-app-config':
+    put:
+      tags:
+        - Users
+      description: Updates a `Users` application config.
+      operationId: userSaveAppConfig
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+        - name: app
+          in: query
+          description: The application name
+          type: string
+          required: true
+        - name: config
+          in: query
+          description: 'An encoded array in the format config[<appname>][<key>]=<value>'
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/users/{id}/update-email':
+    post:
+      tags:
+        - Users
+      description: request email change
+      operationId: userUpdateEmail
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+        - name: newEmail
+          in: formData
+          description: New email address
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/UpdateEmailResponse'
+        '500':
+          description: Error responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/users/{id}/update-email/{token}':
+    put:
+      tags:
+        - Users
+      description: confirm email change
+      operationId: userUpdateEmailConfirm
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+        - name: token
+          in: path
+          description: Token generated when creating email update request
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '405':
+          description: Method Not allowed response
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Error responses
+          schema:
+            $ref: '#/definitions/Error'
+  /users/sign-up:
+    post:
+      description: Sign up a customer
+      operationId: customerSignup
+      tags:
+        - Users
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: email
+          in: formData
+          description: User's email
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: User's password
+          format: password
+          required: true
+          type: string
+        - name: firstName
+          in: formData
+          description: First Name
+          required: false
+          type: string
+        - name: lastName
+          in: formData
+          description: First Name
+          required: false
+          type: string
+        - name: language
+          in: formData
+          description: Preferred Language code for the user
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  '/users/{id}':
+    get:
+      tags:
+        - Users
+      description: Get User
+      operationId: userGet
+      parameters:
+        - in: path
+          name: id
+          description: Users Id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Users
+      description: Update User
+      operationId: userUpdate
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: accountFullName
+          in: formData
+          description: User's name
+          required: false
+          type: string
+        - name: email
+          in: formData
+          description: User's contact email
+          type: string
+          required: false
+        - name: timezone
+          in: formData
+          description: Setup your timezone.
+          type: string
+          required: false
+        - name: defaultDashboard
+          in: formData
+          description: User's default dashboard
+          type: string
+          required: false
+          enum:
+            - Sales
+            - Chargebacks
+        - name: defaultProductView
+          in: formData
+          description: User's default product view.
+          type: string
+          required: false
+          enum:
+            - List
+            - Grid
+        - name: language
+          in: formData
+          description: Preferred Language code for the user
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+parameters: {}

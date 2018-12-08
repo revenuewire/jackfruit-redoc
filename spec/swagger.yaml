@@ -1,0 +1,1501 @@
+swagger: '2.0'
+info:
+  version: v1
+  title: JackFruit REST API
+basePath: /rest/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+
+securityDefinitions:
+  JWT:
+    type: apiKey
+    in: header
+    name: X-Authorization-JWT
+    description: JWT TOKEN (https://jwt.io)
+  API-KEY:
+    type: apiKey
+    in: header
+    name: X-API-KEY
+    description: Platform User API KEY
+
+paths:
+  /token:
+    post:
+      operationId: tokenGenerate
+      tags:
+        - Token
+      description: |
+        Create a new `Token`.
+      parameters:
+        - name: username
+          in: header
+          description: User's username
+          type: string
+        - name: password
+          in: header
+          description: User's password
+          type: string
+      responses:
+        '200':
+          description: Successful Responses
+          schema:
+            $ref: '#/definitions/Token'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /geo-info/supported-languages:
+    get:
+      tags:
+        - GEO
+      description: Get supported languages in the platform
+      operationId: geoGetSupportedLanguages
+      responses:
+        '200':
+          description: Successful Responses
+          schema:
+            $ref: '#/definitions/SupportedLanguages'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /geo-info/countries:
+    get:
+      tags:
+        - GEO
+      description: Get country options available in the platform .
+      operationId: geoGetCountryList
+      responses:
+        '200':
+          description: Successful Responses
+          schema:
+            $ref: '#/definitions/CountryList'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/login:
+    post:
+      tags:
+        - Users
+      description: Login an user
+      operationId: customerLogin
+      security:
+        - JWT: []
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: username
+          in: formData
+          description: User name
+          type: string
+          required: true
+        - name: password
+          in: formData
+          description: User password
+          type: string
+          required: true
+        - name: accountId
+          in: formData
+          description: User Account Id
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Identity'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/order-login:
+      post:
+        tags:
+          - Users
+        description: Login an user by order reference
+        operationId: customerOrderLogin
+        security:
+          - JWT: []
+        consumes:
+          - application/x-www-form-urlencoded
+        parameters:
+          - name: orderReference
+            in: formData
+            description: Order reference
+            type: string
+            required: true
+          - name: lastFourCC
+            in: formData
+            description: Last four CC digets
+            type: string
+            required: true
+          - name: postCode
+            in: formData
+            description: Postcode/Zip
+            type: string
+            required: true
+        responses:
+          '200':
+            description: Successful responses
+            schema:
+              $ref: '#/definitions/Identity'
+          '500':
+            description: Error Responses
+            schema:
+              $ref: '#/definitions/Error'
+
+  /users/verify:
+    put:
+      tags:
+        - Users
+      description: Verify an user account
+      operationId: userVerify
+      security:
+        - JWT: []
+      parameters:
+        - name: email
+          in: query
+          description: User email
+          type: string
+          required: true
+        - name: token
+          in: query
+          description: Token generated when creating a customer user
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/forget-password:
+    post:
+      tags:
+        - Users
+      description: Forgot my password
+      operationId: userForgotPassword
+      security:
+        - JWT: []
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: email
+          in: formData
+          description: Your email address
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/reset-password:
+    post:
+      tags:
+        - Users
+      description: Reset my password
+      operationId: userResetPassword
+      security:
+        - JWT: []
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: email
+          in: formData
+          description: Your email address
+          type: string
+        - name: token
+          in: formData
+          description: Your verificaton token
+          type: string
+        - name: password
+          in: formData
+          description: Your new password
+          type: string
+          format: password
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/{id}/update-password:
+    put:
+      tags:
+        - Users
+      description: Change password
+      operationId: userUpdatePassword
+      security:
+        - JWT: []
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+        - name: oldPassword
+          in: formData
+          description: Your current password
+          format: password
+          required: true
+          type: string
+        - name: newPassword
+          in: formData
+          description: your new password
+          format: password
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/sign-up:
+    post:
+      description: Sign up a customer
+      operationId: customerSignup
+      security:
+        - JWT: []
+      tags:
+        - Users
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: email
+          in: formData
+          description: User's email
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: User's password
+          format: password
+          required: true
+          type: string
+        - name: firstName
+          in: formData
+          description: First Name
+          required: false
+          type: string
+        - name: lastName
+          in: formData
+          description: First Name
+          required: false
+          type: string
+        - name: language
+          in: formData
+          description: Preferred Language code for the user
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      description: Get User
+      operationId: userGet
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: id
+          description: Users Id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Users
+      description: Update User
+      operationId: userUpdate
+      security:
+        - JWT: []
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: firstName
+          in: formData
+          description: Customer's name
+          required: true
+          type: string
+        - name: language
+          in: formData
+          description: Preferred Language code for the user
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/User'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /profiles:
+    get:
+      tags:
+        - Profiles
+      description: Gets `Profiles` object.
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Profile'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Profiles
+      description: Update `Profiles` object.
+      parameters:
+        - name: first_name
+          in: query
+          description: User's first name
+          type: string
+          required: true
+        - name: last_name
+          in: query
+          description: User's lastname
+          type: string
+          required: true
+        - name: email
+          in: query
+          description: User's email
+          type: string
+          required: true
+        - name: timezone
+          in: query
+          description: Setup your timezone.
+          type: string
+        - name: default_dashboard
+          in: query
+          description: User's default dashboard
+          type: string
+          enum:
+            - Sales
+            - Chargebacks
+        - name: default_product_view
+          in: query
+          description: User's default product view.
+          type: string
+          enum:
+            - List
+            - Grid
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Profile'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /profiles/change-password:
+    put:
+      tags:
+        - Profiles
+      description: Update `Profiles` password.
+      parameters:
+        - name: current_password
+          in: query
+          description: User's current password
+          type: string
+          format: password
+          required: true
+        - name: new_password
+          in: query
+          description: User's new password
+          type: string
+          format: password
+          required: true
+        - name: confirm_password
+          in: query
+          description: User's confirm password
+          type: string
+          format: password
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Profile'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /domains:
+    get:
+      tags:
+        - Domains
+      description: Get `Domain` objects.
+      security:
+        - API-KEY: []
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - Domains
+      description: Create `Domain` objects.
+      consumes:
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: domain
+          in: formData
+          description: Domain
+          type: string
+          required: true
+        - name: type
+          in: formData
+          description: Domain type
+          type: string
+          required: true
+          enum:
+            - cart
+            - link
+        - name: cert
+          in: formData
+          description: Certificate
+          type: file
+          required: true
+        - name: key
+          in: formData
+          description: Certificate private key
+          type: file
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /domains/{id}/upload-cert:
+    post:
+      tags:
+        - Domains
+      description: Update `Domain` certificate.
+      consumes:
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - name: cert
+          in: formData
+          description: Certificate
+          type: file
+          required: true
+        - name: key
+          in: formData
+          description: Certificate private key
+          type: file
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /domains/{id}:
+    get:
+      tags:
+        - Domains
+      description: Delete `Domain`.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - Domains
+      description: Get a `Domain`.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - Domains
+      description: Update `Domain` status.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - name: status
+          in: query
+          description: Status of the domain
+          type: string
+          enum:
+            - active
+            - pending
+          required: false
+        - name: hop
+          in: query
+          description: Whether to turn of hop for linker, by default, it should be on unless you know what you are doing.
+          type: string
+          default: 'on'
+          required: false
+          enum:
+            - on
+            - off
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /domains/email:
+    post:
+      tags:
+        - Domains
+      description: Create a `Email` for the domain.
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: body
+          name: labels
+          description: Json Formatted body
+          required: true
+          schema:
+            $ref: '#/definitions/newDomain'
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /domains/email/{id}:
+    delete:
+      tags:
+        - Domains
+      description: Delete a `Email` for the domain.
+      parameters:
+        - name: id
+          in: path
+          description: Email address
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Domain'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers:
+    get:
+      tags:
+        - Customers
+      description: Get list of `Customers` objects.
+      parameters:
+        - name: email
+          in: query
+          description: Customer's Email
+          type: string
+        - name: name
+          in: query
+          description: Customer's Name
+          type: string
+        - name: post_code
+          in: query
+          description: Customer's Post code
+          type: string
+        - name: phone
+          in: query
+          description: Customer's phone
+          type: string
+        - name: page
+          in: query
+          description: Page number
+          type: integer
+          default: 1
+        - name: sort
+          in: query
+          description: Multiple sorting indicators separated by comma
+          type: string
+          default: '-created,email'
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Customer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers/{customerId}:
+    get:
+      tags:
+        - Customers
+      description: Get a `Customer` object.
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Customer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers/{customerUserId}/transactions:
+    get:
+      tags:
+        - Customers
+      description: Get a list of `Transactions` purchased by the customer.
+      parameters:
+        - name: customerUserId
+          in: path
+          description: Customer user id
+          type: string
+          required: true
+        - name: accountId
+          in: query
+          description: Merchant account id
+          type: number
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers/{customerUserId}/offers:
+    get:
+      tags:
+        - Customers
+      description: Get a list of `Offers` purchased by the customer.
+      parameters:
+        - name: customerUserId
+          in: path
+          description: Customer user id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CustomerOffer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers/{customerId}/billing-info/{billingInfoId}:
+    put:
+      tags:
+        - Customers
+      description: Update customer billing info for a recurring profile
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer id
+          type: string
+          required: true
+        - name: billingInfoId
+          in: path
+          description: bill info id for the recurring transaction item
+          type: integer
+          required: true
+        - name: firstName
+          in: formData
+          description: Customer's new first name
+          type: string
+        - name: lastName
+          in: formData
+          description: Customer's new last name
+          type: string
+        - name: cardNumber
+          in: formData
+          description: Credit Card number
+          type: string
+        - name: cardExpiry
+          in: formData
+          description: Credit Card expiry
+          type: string
+        - name: cardCCV
+          in: formData
+          description: Credit CCV (optional)
+          type: string
+        - name: selectedGateway
+          in: formData
+          description: gateway prefered used to update billinfo (optional)
+          type: string
+        - name: postalCode
+          in: formData
+          description: Postal code (optional)
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            $ref: '#/definitions/Customer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /customers/{customerId}/address/{transactionId}:
+    put:
+      tags:
+        - Customers
+      description: Update customer group account address
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer id
+          type: string
+          required: true
+        - name: transactionId
+          in: path
+          description: transaction id
+          type: integer
+          required: true
+        - name: name
+          in: formData
+          description: Customer's name
+          type: string
+        - name: address
+          in: formData
+          description: Customer's address
+          type: string
+        - name: countryCode
+          in: formData
+          description: Country code
+          type: string
+        - name: city
+          in: formData
+          description: City
+          type: string
+        - name: postalCode
+          in: formData
+          description: Postal code
+          type: string
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Customer'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      description: Get a list of transactions a order has
+      parameters:
+        - in: path
+          name: orderId
+          description: Order id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+  /orders/purchase-lookup:
+      post:
+        tags:
+          - Orders
+        description: Look up order info by email and send it
+        parameters:
+          - in: formData
+            name: email
+            description: email
+            type: string
+            required: true
+        responses:
+          '200':
+             description: Successful responses
+             schema:
+               type: array
+               items:
+                 $ref: '#/definitions/Response'
+          '500':
+            description: Error Responses
+            schema:
+              $ref: '#/definitions/Error'
+  /orders/customer-email/{email}:
+    get:
+      tags:
+        - Orders
+      description: Get a list of orders
+      parameters:
+        - name: email
+          in: path
+          description: Customer email
+          type: string
+          required: true
+        - name: merchantFid
+          in: query
+          description: Merchant fid (optional)
+          type: string
+          required: false
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CustomerOrders'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+  /subscriptions/{recurringTransactionItemId}/cancel:
+    put:
+      tags:
+        - Subscriptions
+      description: Cancal customer recurring profile
+      parameters:
+        - in: path
+          name: recurringTransactionItemId
+          description: Recurring transaction item id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful responses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Response'
+        '500':
+          description: Error Responses
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  SupportedLanguages:
+    description: Supported Languages
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/SupportedLanguage'
+
+  SupportedLanguage:
+    description: Language Object
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+
+  CountryList:
+    description: A list of countries
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Country'
+
+  Country:
+    description: Country Object
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+      states:
+        type: array
+        items:
+          $ref: '#/definitions/State'
+
+  State:
+    description: State Object
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+
+  Token:
+    description: Token Object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          userId:
+            type: integer
+            format: int64
+          token:
+            type: string
+            format: password
+          expired:
+            type: string
+
+  Identity:
+    description: Identify of an user
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          customerId:
+            type: integer
+          accountId:
+            type: integer
+          username:
+            type: string
+          isMerchant:
+            type: boolean
+          isStaff:
+            type: boolean
+          isAffiliate:
+            type: boolean
+          isCustomer:
+            type: boolean
+          email:
+            type: string
+  Response:
+    description: Response Object
+    type: object
+    additionalProperties:
+      type: string
+
+  User:
+    description: User object
+    type: object
+    properties:
+      response:
+        $ref: '#/definitions/Response'
+      data:
+        type: object
+        properties:
+          id:
+            type: integer
+          username:
+            type: string
+          email:
+            type: string
+          firstName:
+            type: string
+          lastName:
+            type: string
+          timezone:
+            type: string
+          accountId:
+            type: integer
+          passwordExpiryDates:
+            type: integer
+          lastLoginDate:
+            type: string
+          lastLoginIp:
+            type: string
+          language:
+            type: string
+
+  Profile:
+    description: User's Profile
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      timezone:
+        type: string
+      accountId:
+        type: integer
+      passwordExpiryDates:
+        type: integer
+      defaultDashboard:
+        type: string
+      defaultProductView:
+        type: string
+      lastLoginDate:
+        type: string
+      lastLoginIp:
+        type: string
+      language:
+        type: string
+  Domain:
+    description: Domain
+    type: object
+    properties:
+      id:
+        type: integer
+      key:
+        type: string
+        description: Unique identification of the domain resource
+      domain:
+        type: string
+      type:
+        type: string
+      merchant:
+        type: string
+      status:
+        type: string
+      emails:
+        description: A list of emails if it is an email domain
+        type: array
+        items:
+          $ref: '#/definitions/DomainEmail'
+  DomainEmailLabel:
+    description: Email Label
+    type: object
+    properties:
+      lang:
+        type: string
+      label:
+        type: string
+  DomainEmail:
+    description: Domain Email
+    type: object
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+      labels:
+        type: array
+        items:
+          $ref: '#/definitions/DomainEmailLabel'
+      primary:
+        type: boolean
+        default: true
+  Error:
+    description: Server Error Response
+    type: object
+    properties:
+      code:
+        type: boolean
+        description: HTTP STATUS CODE
+      message:
+        type: string
+      key:
+        type: string
+        description: error message key
+      context:
+        type: object
+        additionalProperties:
+          type: string
+
+  Customer:
+    description: Customer object
+    type: object
+    properties:
+      id:
+        type: integer
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      timezone:
+        type: string
+      language:
+        type: string
+      created:
+        type: string
+        format: date
+      addresses:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerAddress'
+      phones:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerPhone'
+  CustomerAddress:
+    description: Customer's Addresses
+    type: object
+    properties:
+      id:
+        type: integer
+      customerAccountId:
+        type: integer
+      transactionId:
+        type: integer
+      name:
+        type: string
+      address:
+        type: string
+      address2:
+        type: string
+      countryCode:
+        type: string
+      regionCode:
+        type: string
+      city:
+        type: string
+      postalCode:
+        type: string
+      type:
+        type: string
+  CustomerPhone:
+    description: Customer's phones
+    type: object
+    properties:
+      id:
+        type: integer
+      customerAccountId:
+        type: integer
+      phoneNumber:
+        type: string
+      countryCode:
+        type: string
+      type:
+        type: string
+  CustomerOffer:
+    description: Customer Offer
+    type: object
+    properties:
+      offer:
+        $ref: '#/definitions/Offer'
+  Offer:
+    description: Offer
+    type: object
+    properties:
+      offerId:
+        type: integer
+        description: Offer Id
+      transactionItemId:
+        type: integer
+        description: Transaction Item Id
+      transactionId:
+        type: integer
+        description: Transaction Id
+      name:
+        type: string
+        description: Offer Name
+      translatedName:
+        type: string
+        description: Translated Offer Name
+      productName:
+        type: string
+        description: Product Name
+      translatedProductName:
+        type: string
+        description: Translated Product Name
+      receiptUrl:
+        type: string
+        description: Receipt Url for this transaction
+      isRecurring:
+        type: boolean
+      isTrial:
+        type: boolean
+      TransactionItem:
+        $ref: '#/definitions/TransactionItem'
+      RecurringItem:
+        $ref: '#/definitions/RecurringItem'
+  RecurringItem:
+    description: Recurring Item
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Recurring Transaction Item Id
+      offerId:
+        type: integer
+      initialSaleDate:
+        type: string
+        format: date
+      nextBillingDate:
+        type: string
+        format: date
+      finalBillingDate:
+        type: string
+        format: date
+      interval:
+        type: integer
+      rebillFrequencyType:
+        type: string
+      rebillFrequencyValue:
+        type: integer
+      deactivatedDate:
+        type: string
+        format: date
+      deactivatedType:
+        type: string
+      status:
+        type: string
+  Transaction:
+    description: Transaction
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Transaction Id
+      type:
+        type: string
+        description: Transaction Type
+      date:
+        type: string
+        format: date-time
+      reference:
+        type: string
+      fullReference:
+        type: string
+      merchantNamr:
+        type: string
+      supportEmail:
+        type: string
+      totalPrice:
+        type: number
+      subTotalPrice:
+        type: number
+      totalPriceTax:
+        type: number
+      totalUsdPrice:
+        type: number
+      totalUsdPriceTax:
+        type: number
+      gateway:
+        type: string
+      gatewayReference:
+        type: string
+      extraParameters:
+        type: string
+      transactionItems:
+        type: array
+        items:
+          $ref: '#/definitions/TransactionItem'
+      order:
+        type: integer
+      parentTransactionId:
+        type: integer
+      shippingAddress:
+        $ref: '#/definitions/CustomerAddress'
+      billInfo:
+        $ref: '#/definitions/BillInfo'
+  CustomerOrders:
+    description: CustomerOrders
+    type: object
+    properties:
+      orders:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerOrder'
+  CustomerOrder:
+    description: CustomerOrder
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Order Id
+      created:
+        type: string
+        format: date-time
+      reference:
+        type: string
+  BillInfo:
+    description: Billing Information
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Billing Information
+      gatewayProcessor:
+        type: string
+      currencyCode:
+        type: string
+      cardNumber:
+        type: string
+      cardType:
+        type: string
+      expiry:
+        type: string
+      payerId:
+        type: string
+      gatewayReference:
+        type: string
+      billingAddressName:
+        type: string
+      billingAddressPostalCode:
+        type: string
+      billingAddressRegionCode:
+        type: string
+      billingAddressCountryCode:
+        type: string
+  TransactionItem:
+    description: Transaction Item
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Transaction Item Id
+      sku:
+        type: string
+      quantity:
+        type: integer
+      price:
+        type: number
+      priceTax:
+        type: number
+      usdPrice:
+        type: number
+      usdPriceTax:
+        type: number
+      image:
+        type: string
+  newDomain:
+    description: Add new domain
+    type: object
+    properties:
+      email:
+        type: string
+      labels:
+        type: array
+        items:
+          $ref: '#/definitions/DomainEmailLabel'
